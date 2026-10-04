@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caravana · Áreas y parkings para autocaravanas en España</title>
+  <meta name="description" content="Mapa de áreas de autocaravanas, parkings, campings y puntos de vaciado en toda España, con servicios, horarios y cómo llegar. Datos de OpenStreetMap.">
+  <meta name="theme-color" content="#1F3B2D">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231F3B2D'/%3E%3Cpath d='M7 20V12a2 2 0 0 1 2-2h11l5 5v5H7z' fill='%23F2E8D5'/%3E%3Ccircle cx='12' cy='21' r='2.5' fill='%23E07A3F'/%3E%3Ccircle cx='21' cy='21' r='2.5' fill='%23E07A3F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Caravana, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 21V11a3 3 0 0 1 3-3h13l6 6v7H5z" fill="currentColor"/><circle cx="11" cy="22" r="3" class="brand-wheel"/><circle cx="21" cy="22" r="3" class="brand-wheel"/></svg>
+      <span>Caravana</span>
+    </a>
+    <form class="search" id="searchForm" role="search" autocomplete="off">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="searchInput" type="search" placeholder="Busca una ciudad, pueblo o zona…" aria-label="Buscar localidad" aria-controls="searchResults" aria-expanded="false">
+      <ul id="searchResults" class="search-results" role="listbox" hidden></ul>
+    </form>
+    <button type="button" class="btn btn-ghost" data-action="locate" title="Centrar el mapa en tu ubicación">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+      <span>Cerca de mí</span>
+    </button>
+  </header>
+
+  <main class="layout">
+    <aside class="panel" id="panel" aria-label="Filtros y resultados">
+      <div class="panel-handle" data-action="toggle-panel" aria-hidden="true"></div>
+
+      <section class="filters" aria-label="Filtros">
+        <fieldset>
+          <legend>Tipo</legend>
+          <div class="chips" id="kindFilters"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Servicios</legend>
+          <div class="chips" id="serviceFilters"></div>
+        </fieldset>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <header class="results-head">
+          <h2 id="resultsTitle">Sitios en el mapa</h2>
+          <p id="resultsCount" class="muted"></p>
+        </header>
+        <ol id="resultsList" class="results-list"></ol>
+      </section>
+
+      <article id="detail" class="detail" hidden aria-live="polite"></article>
+    </aside>
+
+    <div id="map" class="map" role="region" aria-label="Mapa de sitios"></div>
+  </main>
+
+  <footer class="credits">
+    Datos © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">colaboradores de OpenStreetMap</a> (ODbL) · actualizados <span id="dataDate">—</span> ·
+    <a href="https://github.com/alex981110/caravana" target="_blank" rel="noopener">código en GitHub</a>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
