@@ -1,6 +1,6 @@
 # Caravana
 
-Mapa de **áreas de autocaravanas, parkings autorizados, campings y puntos de vaciado** en toda España (península, Baleares y Canarias).
+Mapa de **áreas de autocaravanas, campings, parkings autorizados y puntos de vaciado** en toda España (península, Baleares y Canarias).
 
 - Mapa con los sitios agrupados y un color por tipo
 - Buscador de localidades y botón «Cerca de mí»
@@ -20,10 +20,32 @@ Los datos salen de [OpenStreetMap](https://www.openstreetmap.org) (© colaborado
 |---|---|
 | Área de autocaravanas | `tourism=caravan_site` |
 | Parking autorizado | `amenity=parking` + `motorhome=yes/designated` |
-| Camping | `tourism=camp_site` + `motorhome=yes/designated` |
+| Camping | `tourism=camp_site` (se excluyen los marcados `motorhome=no`, `caravans=no`, `backcountry=yes`, `camp_site=basic`, `group_only=yes` y `scout=yes`) |
 | Punto de vaciado | `amenity=sanitary_dump_station` |
 
 Los puntos de vaciado a menos de 150 m de un área se fusionan con ella (el área queda marcada «con vaciado»).
+
+En los campings, la ficha indica si se sabe que admiten autocaravanas (`motorhome=yes`), caravanas (`caravans=yes`) o si no hay dato. El filtro «Confirmado para autocaravanas» deja solo los que tienen dato.
+
+### Registros oficiales
+
+Los campings se cruzan con los registros oficiales publicados como datos abiertos (reutilización conforme a la Ley 37/2007 y el RD 1495/2011, citando la fuente):
+
+| Fuente | Datos |
+|---|---|
+| Junta de Castilla y León | Registro de campings, con coordenadas |
+| Gobierno Vasco · Open Data Euskadi | Campings de Euskadi, con coordenadas |
+| Diputación de Castellón | Campings de la provincia, con coordenadas |
+| Región de Murcia | Campings, con coordenadas (UTM) |
+| Concello de Vigo | Campings de Vigo, con coordenadas |
+| Generalitat Valenciana | Lista de campings |
+| Gobierno de Aragón | Campings turísticos |
+| Junta de Comunidades de Castilla-La Mancha | Campings y áreas de autocaravanas |
+| Junta de Extremadura | Campamentos turísticos |
+
+Si un camping del registro ya está en OpenStreetMap (mismo nombre cerca), se completa con plazas, categoría, teléfono y web, y la ficha indica que está inscrito en el registro. Si no está y el registro trae coordenadas, se añade como sitio nuevo. Los registros sin coordenadas solo se usan para completar sitios que ya existen: no se colocan en el centro del municipio. El código está en [`scripts/registros.mjs`](scripts/registros.mjs).
+
+Faltan registros publicados con coordenadas de Andalucía, Cataluña, Galicia, Asturias, Cantabria, Navarra, La Rioja, Madrid, Baleares y Canarias.
 
 Si falta un sitio o hay un error, se corrige en OpenStreetMap: cada ficha tiene un enlace directo y el cambio aparece aquí en la siguiente actualización.
 
@@ -50,8 +72,11 @@ npm run dev        # o cualquier servidor estático
 | `index.html` | Página |
 | `css/styles.css` | Estilos |
 | `js/app.js` | Mapa, filtros, lista, ficha y buscador |
-| `data/sitios.json` | Datos procesados |
+| `data/sitios.json` | Datos procesados que usa la web |
+| `data/registros.json` | Última copia buena de cada registro oficial (si una fuente falla, se usa esta) |
+| `data/municipios.json` | Coordenadas de municipios ya consultadas a Nominatim |
 | `scripts/build-data.mjs` | Descarga y procesado de OpenStreetMap |
+| `scripts/registros.mjs` | Descarga y cruce de los registros oficiales |
 
 Servicios externos: teselas de [OpenStreetMap](https://www.openstreetmap.org) y [OpenTopoMap](https://opentopomap.org) (CC-BY-SA), búsqueda de localidades con [Photon](https://photon.komoot.io) y [Leaflet](https://leafletjs.com) para el mapa.
 

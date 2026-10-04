@@ -298,6 +298,17 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2
 [data-theme="nav"] .services li.yes svg { color: var(--accent); }
 .services li.no { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ink-3) 60%, transparent); opacity: 0.75; }
 .services li small { font-size: 0.7rem; color: var(--ink-3); }
+.fit, .official { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 12px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.88rem; line-height: 1.45; }
+.fit svg, .official svg { width: 18px; height: 18px; margin-top: 1px; }
+.fit-yes { background: color-mix(in srgb, var(--k-camping) 14%, transparent); color: var(--ink); }
+.fit-yes svg { color: var(--k-camping); }
+.fit-likely { background: color-mix(in srgb, var(--accent-2) 10%, transparent); color: var(--ink); }
+.fit-likely svg { color: var(--accent-2); }
+.fit-unknown { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--ink); }
+.fit-unknown svg { color: var(--accent-strong); }
+.official { background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); }
+.official svg { color: var(--accent-strong); }
+[data-theme="nav"] .fit-unknown svg, [data-theme="nav"] .official svg { color: var(--accent); }
 .facts { margin: 0 0 18px; display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 0.9rem; padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--line); }
 .facts dt { color: var(--ink-3); }
 .facts dd { margin: 0; overflow-wrap: anywhere; }

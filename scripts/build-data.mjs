@@ -5,6 +5,7 @@
 // Datos © colaboradores de OpenStreetMap, licencia ODbL: https://www.openstreetmap.org/copyright
 
 import { readFile, writeFile } from 'node:fs/promises';
+import { applyRegistries, SOURCES } from './registros.mjs';
 
 const ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
@@ -18,7 +19,7 @@ area["ISO3166-1"="ES"][admin_level=2]->.es;
   nwr["tourism"="caravan_site"](area.es);
   nwr["amenity"="sanitary_dump_station"](area.es);
   nwr["amenity"="parking"]["motorhome"~"^(yes|designated)$"](area.es);
-  nwr["tourism"="camp_site"]["motorhome"~"^(yes|designated)$"](area.es);
+  nwr["tourism"="camp_site"](area.es);
 );
 out center tags;
 `;
@@ -55,8 +56,34 @@ function kindOf(t) {
   return 'camping';
 }
 
+// Campings: se excluyen los que no admiten vehículos (sin caravanas ni autocaravanas,
+// acampada libre o solo tiendas); del resto se guarda si está confirmado
+const OK_VALUES = ['yes', 'designated'];
+function campingExcluded(t) {
+  if (t.tourism !== 'camp_site') return false;
+  const mh = (t.motorhome || '').toLowerCase(), cv = (t.caravans || '').toLowerCase();
+  if (mh === 'no') return true;
+  if (cv === 'no' && !OK_VALUES.includes(mh)) return true;
+  if (t.backcountry === 'yes' || t.camp_site === 'basic' || t.camp_site === 'backcountry') return true;
+  if (t.group_only === 'yes' || t.scout === 'yes') return true;
+  return false;
+}
+// 2 = admite autocaravanas, 1 = admite caravanas (casi seguro también autocaravanas), sin campo = sin dato
+function campingFit(t) {
+  if (OK_VALUES.includes((t.motorhome || '').toLowerCase())) return 2;
+  if (OK_VALUES.includes((t.caravans || '').toLowerCase())) return 1;
+  return undefined;
+}
+
+const excludedCampings = [];   // posiciones de campings no aptos: los registros no los vuelven a añadir
+
 function normalize(el) {
   const t = el.tags || {};
+  if (campingExcluded(t)) {
+    const la = el.lat ?? el.center?.lat, lo = el.lon ?? el.center?.lon;
+    if (la != null) excludedCampings.push({ la, lo });
+    return null;
+  }
   const lat = el.lat ?? el.center?.lat;
   const lon = el.lon ?? el.center?.lon;
   if (lat == null || lon == null) return null;
@@ -85,6 +112,7 @@ function normalize(el) {
     tel: t.phone || t['contact:phone'] || undefined,
     c: city || undefined,
     ds: t['description:es'] || t.description || undefined,
+    ok: kind === 'camping' ? campingFit(t) : undefined,
   };
   for (const k of Object.keys(site)) if (site[k] == null) delete site[k];
   return site;
@@ -118,7 +146,8 @@ function mergeDumpStations(sites) {
 
 const raw = await fetchOverpass();
 const normalized = raw.elements.map(normalize).filter(Boolean);
-const { sites, merged } = mergeDumpStations(normalized);
+const { added, stats } = await applyRegistries(normalized, excludedCampings);
+const { sites, merged } = mergeDumpStations([...normalized, ...added]);
 sites.sort((a, b) => a.id.localeCompare(b.id));   // orden estable: diffs pequeños entre actualizaciones
 
 // Si los sitios no han cambiado se conserva la fecha anterior: así la tarea semanal no
@@ -131,9 +160,14 @@ const unchanged = previous && JSON.stringify(previous.sitios) === JSON.stringify
 const out = {
   generado: unchanged ? previous.generado : new Date().toISOString().slice(0, 10),
   fuente: 'OpenStreetMap (ODbL) · https://www.openstreetmap.org/copyright',
+  registros: Object.fromEntries(Object.entries(SOURCES).map(([k, v]) => [k, v.nombre])),
   sitios: sites,
 };
 await writeFile(OUT_FILE, JSON.stringify(out));
 
 const byKind = sites.reduce((acc, s) => ((acc[s.k] = (acc[s.k] || 0) + 1), acc), {});
+console.table(stats);
 console.log(`${sites.length} sitios (${merged} puntos de vaciado fusionados con su área):`, byKind);
+
+// Salida explícita: en Windows, Node a veces aborta al cerrar conexiones de red pendientes
+process.exit(0);

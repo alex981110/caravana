@@ -23,6 +23,9 @@ const ICON = {
   phone:   svg('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>'),
   edit:    svg('<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
   euro:    svg('<path d="M18 7a6 6 0 1 0 0 10M4 10h9M4 14h9"/>'),
+  check:   svg('<path d="M5 12l5 5L20 7"/>'),
+  info:    svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'),
+  badge:   svg('<path d="M12 2l2.4 2.2 3.2-.4.8 3.1 2.8 1.6-1.2 3 1.2 3-2.8 1.6-.8 3.1-3.2-.4L12 22l-2.4-2.2-3.2.4-.8-3.1-2.8-1.6 1.2-3-1.2-3 2.8-1.6.8-3.1 3.2.4z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
 };
 
 // ── Configuración ──────────────────────────────────────────────
@@ -35,6 +38,7 @@ const KINDS = {
 // [clave, etiqueta, ¿cumple el filtro?, campo del dato, icono]
 const SERVICES = [
   ['gratis', 'Gratis',       s => s.fee === false, 'fee',  'euro'],
+  ['conf',   'Confirmado para autocaravanas', s => s.k !== 'camping' || s.ok >= 1, null, 'check'],
   ['agua',   'Agua',         s => s.w === true,    'w',    'agua'],
   ['luz',    'Electricidad', s => s.e === true,    'e',    'luz'],
   ['vaciado','Vaciado',      s => s.d === true,    'd',    'vaciadoS'],
@@ -42,7 +46,7 @@ const SERVICES = [
   ['duchas', 'Duchas',       s => s.sh === true,   'sh',   'duchas'],
   ['wifi',   'Wifi',         s => s.wifi === true, 'wifi', 'wifi'],
 ];
-const AMENITIES = SERVICES.filter(([key]) => key !== 'gratis');
+const AMENITIES = SERVICES.filter(([key]) => key !== 'gratis' && key !== 'conf');
 
 // Estilos de la web: cada uno con sus teselas de mapa y color de la barra del navegador
 const THEMES = {
@@ -71,6 +75,7 @@ const state = {
   selected: null,
   user: null,          // { la, lo } si el usuario ha compartido su ubicación
   theme: 'roadtrip',
+  registros: {},       // fuente → organismo, para citar el registro oficial
 };
 let map, cluster, userMarker, tileLayer, tileKey;
 const markers = new Map();
@@ -100,6 +105,13 @@ function fmtStay(ms) {
   if (!ms) return null;
   if (/^(no|none|unlimited)$/i.test(ms.trim())) return 'Sin límite';
   return ms.replace(/\bdays?\b/i, 'días').replace(/\bhours?\b/i, 'horas').replace(/\bnights?\b/i, 'noches');
+}
+// Qué se sabe de si un camping admite autocaravanas
+function campingFit(s) {
+  if (s.k !== 'camping') return null;
+  if (s.ok === 2) return { short: 'admite autocaravanas', long: 'Admite autocaravanas', cls: 'yes' };
+  if (s.ok === 1) return { short: 'admite caravanas', long: 'Admite caravanas (casi siempre también autocaravanas; confírmalo)', cls: 'likely' };
+  return { short: 'sin confirmar', long: 'Sin confirmar si admite autocaravanas: llama antes de ir', cls: 'unknown' };
 }
 const siteName = s => s.n || `${KINDS[s.k].label}${s.c ? ' en ' + s.c : ''}`;
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
@@ -230,7 +242,7 @@ function renderList() {
       ${kindIcon(s.k)}
       <strong>${esc(siteName(s))}</strong>
       <span class="dist">${fmtKm(s._d)}</span>
-      <span class="kind-label">${esc(KINDS[s.k].label)}${s.c && s.n ? ' · ' + esc(s.c) : ''}</span>
+      <span class="kind-label">${esc(KINDS[s.k].label)}${campingFit(s) ? ' · ' + campingFit(s).short : ''}${s.c && s.n ? ' · ' + esc(s.c) : ''}</span>
       <span class="svc-row">${serviceIcons(s)}${priceTag(s)}</span>
     </li>`).join('') + (visible.length > LIST_LIMIT
     ? `<li class="results-empty">Y ${(visible.length - LIST_LIMIT).toLocaleString('es-ES')} más: acerca el mapa para verlos.</li>` : '');
@@ -248,7 +260,9 @@ function renderDetail(s) {
     ['Horario', fmtHours(s.oh)], ['Estancia máxima', fmtStay(s.ms)], ['Plazas', s.cap],
     ['Coordenadas', `${s.la.toFixed(5)}, ${s.lo.toFixed(5)}`, 'num'],
   ].filter(([, v]) => v).map(([t, v, cls]) => `<dt>${t}</dt><dd${cls ? ` class="${cls}"` : ''}>${esc(v)}</dd>`).join('');
-  const osmType = { n: 'node', w: 'way', r: 'relation' }[s.id[0]];
+  const osmType = { n: 'node', w: 'way', r: 'relation' }[s.id[0]];   // undefined en sitios que solo están en un registro
+  const fit = campingFit(s);
+  const official = s.rg ? `<p class="official">${ICON.badge}<span>Inscrito en el registro oficial de campings${state.registros[s.rg] ? ' · ' + esc(state.registros[s.rg]) : ''}${s.cat ? ` · <strong>${esc(s.cat)}</strong>` : ''}</span></p>` : '';
   const webUrl = s.web && /^https?:\/\//i.test(s.web) ? s.web : s.web ? 'https://' + s.web : null;
   const where = [s.c && esc(s.c), state.user && `a ${fmtKm(km(state.user, s))} de ti`].filter(Boolean).join(' · ');
 
@@ -260,6 +274,8 @@ function renderDetail(s) {
       <h2>${esc(siteName(s))}</h2>
     </div>
     <p class="where">${where ? `<span>${where}</span>` : ''}${priceTag(s) || '<span class="price unknown">Precio sin datos</span>'}</p>
+    ${fit ? `<p class="fit fit-${fit.cls}">${fit.cls === 'yes' ? ICON.check : ICON.info}<span>${fit.long}</span></p>` : ''}
+    ${official}
     <ul class="services">${AMENITIES.map(([, label, , field, icon]) => serviceItem(label, s[field], icon)).join('')}</ul>
     ${facts ? `<dl class="facts">${facts}</dl>` : ''}
     ${s.ds ? `<p class="desc">${esc(s.ds)}</p>` : ''}
@@ -268,7 +284,9 @@ function renderDetail(s) {
       ${webUrl ? `<a class="btn btn-line" href="${esc(webUrl)}" target="_blank" rel="noopener">${ICON.web}Web</a>` : ''}
       ${s.tel ? `<a class="btn btn-line" href="tel:${esc(s.tel.replace(/\s+/g, ''))}">${ICON.phone}${esc(s.tel)}</a>` : ''}
     </div>
-    <p class="source">¿Falta algo o hay un error? <a href="https://www.openstreetmap.org/${osmType}/${s.id.slice(1)}" target="_blank" rel="noopener">Corrígelo en OpenStreetMap</a> y aparecerá aquí en la siguiente actualización.</p>`;
+    <p class="source">${osmType
+      ? `¿Falta algo o hay un error? <a href="https://www.openstreetmap.org/${osmType}/${s.id.slice(1)}" target="_blank" rel="noopener">Corrígelo en OpenStreetMap</a> y aparecerá aquí en la siguiente actualización.`
+      : `Este sitio aún no está en OpenStreetMap: sale del registro oficial. Si lo conoces, <a href="https://www.openstreetmap.org/edit#map=17/${s.la}/${s.lo}" target="_blank" rel="noopener">añádelo a OpenStreetMap</a>.`}</p>`;
 }
 
 function openSite(id, { fly = true } = {}) {
@@ -310,7 +328,7 @@ function saveView() {
 }
 function restoreView() {
   const h = decodeURIComponent(location.hash.slice(1));
-  const site = h.match(/^s=([nwr]\d+)$/);
+  const site = h.match(/^s=([nwr]\d+|x[\w-]+)$/);
   if (site && state.byId.has(site[1])) { openSite(site[1]); return; }
   const v = h.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),(\d+)$/);
   if (v) map.setView([+v[1], +v[2]], +v[3]);
@@ -399,6 +417,8 @@ document.addEventListener('keydown', e => {
     else if (state.selected) closeSite();
   }
 });
+// Enlaces a otro sitio dentro de la web (cambio de #)
+window.addEventListener('hashchange', () => restoreView());
 $('searchInput').addEventListener('input', debounce(e => searchPlaces(e.target.value), 300));
 $('searchInput').addEventListener('keydown', e => {
   if (e.key === 'ArrowDown') { e.preventDefault(); moveSearchSelection(1); }
@@ -414,6 +434,7 @@ $('searchForm').addEventListener('submit', e => { e.preventDefault(); pickPlace(
     const data = await (await fetch('data/sitios.json')).json();
     state.sites = data.sitios;
     state.sites.forEach(s => state.byId.set(s.id, s));
+    state.registros = data.registros || {};
     $('statTotal').textContent = state.sites.length.toLocaleString('es-ES');
     $('dataDate').textContent = new Date(data.generado + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   } catch (e) {

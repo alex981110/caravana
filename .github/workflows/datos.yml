@@ -1,7 +1,8 @@
 name: Actualizar datos
 
-# Cada lunes descarga de OpenStreetMap los sitios para autocaravanas y, si hay
-# cambios, actualiza data/sitios.json. También se puede lanzar a mano desde «Actions».
+# Cada lunes descarga de OpenStreetMap los sitios para autocaravanas y los registros
+# oficiales de campings y, si hay cambios, actualiza data/. También se puede lanzar
+# a mano desde «Actions».
 on:
   schedule:
     - cron: '0 4 * * 1'
@@ -25,12 +26,12 @@ jobs:
 
       - name: Guardar si hay cambios
         run: |
-          if git diff --quiet -- data/sitios.json; then
-            echo "Sin cambios en OpenStreetMap."
+          if git diff --quiet -- data/; then
+            echo "Sin cambios en los datos."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/sitios.json
-          git commit -m "Datos: actualización semanal desde OpenStreetMap"
+          git add data/
+          git commit -m "Datos: actualización semanal (OpenStreetMap y registros oficiales)"
           git push
