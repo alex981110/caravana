@@ -1,6 +1,30 @@
 // Caravana — mapa de áreas y parkings para autocaravanas en España
 'use strict';
 
+// ── Iconos (trazo, 24×24) ──────────────────────────────────────
+const svg = inner => `<svg viewBox="0 0 24 24" aria-hidden="true">${inner}</svg>`;
+const ICON = {
+  // Tipos de sitio
+  area:    svg('<path d="M2 16V8a2 2 0 0 1 2-2h11l5 4.5V16z"/><path d="M15 6v4.5h5"/><circle cx="7" cy="17" r="2"/><circle cx="16" cy="17" r="2"/>'),
+  parking: svg('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5"/>'),
+  camping: svg('<path d="M3 20 12 4l9 16z"/><path d="M12 20l-3-6h6z"/>'),
+  vaciado: svg('<path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/>'),
+  // Servicios
+  agua:    svg('<path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/>'),
+  luz:     svg('<path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v5"/>'),
+  vaciadoS: svg('<path d="M12 3v11M7.5 9.5 12 14l4.5-4.5"/><path d="M4 18h16v3H4z"/>'),
+  aseos:   svg('<path d="M7 3h10v7H7zM5 10h14a7 7 0 0 1-14 0zM9 17l-1 4M15 17l1 4"/>'),
+  duchas:  svg('<path d="M4 21V7a4 4 0 0 1 8 0"/><path d="M8 7h8"/><path d="M10 11v1M14 11v1M12 14v1M16 14v1M10 17v1M14 17v1"/>'),
+  wifi:    svg('<path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="0.5"/>'),
+  // Interfaz
+  back:    svg('<path d="M15 18l-6-6 6-6"/>'),
+  route:   svg('<path d="m3 11 19-9-9 19-2-8-8-2z"/>'),
+  web:     svg('<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/>'),
+  phone:   svg('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>'),
+  edit:    svg('<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+  euro:    svg('<path d="M18 7a6 6 0 1 0 0 10M4 10h9M4 14h9"/>'),
+};
+
 // ── Configuración ──────────────────────────────────────────────
 const KINDS = {
   area:    { label: 'Área de autocaravanas', short: 'Áreas',    color: 'var(--k-area)' },
@@ -8,31 +32,35 @@ const KINDS = {
   camping: { label: 'Camping',               short: 'Campings', color: 'var(--k-camping)' },
   vaciado: { label: 'Punto de vaciado',      short: 'Vaciado',  color: 'var(--k-vaciado)' },
 };
-// [clave, etiqueta, ¿cumple el filtro?, campo con el dato para la ficha]
+// [clave, etiqueta, ¿cumple el filtro?, campo del dato, icono]
 const SERVICES = [
-  ['gratis', 'Gratis',       s => s.fee === false, 'fee'],
-  ['agua',   'Agua',         s => s.w === true,    'w'],
-  ['luz',    'Electricidad', s => s.e === true,    'e'],
-  ['vaciado','Vaciado',      s => s.d === true,    'd'],
-  ['aseos',  'Aseos',        s => s.toi === true,  'toi'],
-  ['duchas', 'Duchas',       s => s.sh === true,   'sh'],
-  ['wifi',   'Wifi',         s => s.wifi === true, 'wifi'],
+  ['gratis', 'Gratis',       s => s.fee === false, 'fee',  'euro'],
+  ['agua',   'Agua',         s => s.w === true,    'w',    'agua'],
+  ['luz',    'Electricidad', s => s.e === true,    'e',    'luz'],
+  ['vaciado','Vaciado',      s => s.d === true,    'd',    'vaciadoS'],
+  ['aseos',  'Aseos',        s => s.toi === true,  'toi',  'aseos'],
+  ['duchas', 'Duchas',       s => s.sh === true,   'sh',   'duchas'],
+  ['wifi',   'Wifi',         s => s.wifi === true, 'wifi', 'wifi'],
 ];
+const AMENITIES = SERVICES.filter(([key]) => key !== 'gratis');
+
+// Estilos de la web: cada uno con sus teselas de mapa y color de la barra del navegador
+const THEMES = {
+  roadtrip: { color: '#E2603A', tiles: 'osm' },
+  nav:      { color: '#0E1116', tiles: 'osm' },
+  nature:   { color: '#2F7D5B', tiles: 'topo' },
+};
+const TILES = {
+  osm:  { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' },
+  topo: { url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 17, subdomains: 'abc',
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM · estilo &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)' },
+};
+
 const SPAIN = { center: [40.2, -3.6], zoom: 6 };
 const LIST_LIMIT = 60;
 const PHOTON = 'https://photon.komoot.io/api/';
 const SPAIN_BBOX = '-18.6,27.4,4.6,44.0';  // península, Baleares y Canarias
-
-const ICONS = {
-  back:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
-  yes:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>',
-  no:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-  maybe: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="1"/></svg>',
-  route: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 19-9-9 19-2-8-8-2z"/></svg>',
-  web:   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg>',
-  phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
-  edit:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
-};
 
 // ── Estado ─────────────────────────────────────────────────────
 const state = {
@@ -42,8 +70,9 @@ const state = {
   services: new Set(),
   selected: null,
   user: null,          // { la, lo } si el usuario ha compartido su ubicación
+  theme: 'roadtrip',
 };
-let map, cluster, userMarker;
+let map, cluster, userMarker, tileLayer, tileKey;
 const markers = new Map();
 
 // ── Utilidades ─────────────────────────────────────────────────
@@ -55,21 +84,22 @@ function km(a, b) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 const fmtKm = d => d < 1 ? `${Math.round(d * 1000)} m` : d < 10 ? `${d.toFixed(1).replace('.', ',')} km` : `${Math.round(d)} km`;
+
 // Horario y estancia de OpenStreetMap en español
-const MONTHS = { Jan: "ene", Feb: "feb", Mar: "mar", Apr: "abr", May: "may", Jun: "jun", Jul: "jul", Aug: "ago", Sep: "sep", Oct: "oct", Nov: "nov", Dec: "dic" };
-const DAYS = { Mo: "L", Tu: "M", We: "X", Th: "J", Fr: "V", Sa: "S", Su: "D", PH: "festivos" };
+const MONTHS = { Jan: 'ene', Feb: 'feb', Mar: 'mar', Apr: 'abr', May: 'may', Jun: 'jun', Jul: 'jul', Aug: 'ago', Sep: 'sep', Oct: 'oct', Nov: 'nov', Dec: 'dic' };
+const DAYS = { Mo: 'L', Tu: 'M', We: 'X', Th: 'J', Fr: 'V', Sa: 'S', Su: 'D', PH: 'festivos' };
 function fmtHours(oh) {
   if (!oh) return null;
-  if (oh.trim() === "24/7") return "24 horas, todos los días";
+  if (oh.trim() === '24/7') return '24 horas, todos los días';
   return oh.replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, m => MONTHS[m])
     .replace(/\b(Mo|Tu|We|Th|Fr|Sa|Su|PH)\b/g, d => DAYS[d])
-    .replace(/\boff\b/g, "cerrado")
-    .replace(/;\s*/g, " · ");
+    .replace(/\boff\b/g, 'cerrado')
+    .replace(/;\s*/g, ' · ');
 }
 function fmtStay(ms) {
   if (!ms) return null;
-  if (/^(no|none|unlimited)$/i.test(ms.trim())) return "Sin límite";
-  return ms.replace(/\bdays?\b/i, "días").replace(/\bhours?\b/i, "horas").replace(/\bnights?\b/i, "noches");
+  if (/^(no|none|unlimited)$/i.test(ms.trim())) return 'Sin límite';
+  return ms.replace(/\bdays?\b/i, 'días').replace(/\bhours?\b/i, 'horas').replace(/\bnights?\b/i, 'noches');
 }
 const siteName = s => s.n || `${KINDS[s.k].label}${s.c ? ' en ' + s.c : ''}`;
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
@@ -81,20 +111,50 @@ function toast(msg) {
 }
 const matches = s => state.kinds.has(s.k) && SERVICES.every(([key, , test]) => !state.services.has(key) || test(s));
 const isMobile = () => window.matchMedia('(max-width: 820px)').matches;
+const kindIcon = k => `<span class="kind-icon" style="--kc:${KINDS[k].color}">${ICON[k]}</span>`;
+function priceTag(s) {
+  if (s.fee === false) return '<span class="price free">Gratis</span>';
+  if (s.fee === true) return `<span class="price paid">De pago${s.ch ? ' · ' + esc(s.ch) : ''}</span>`;
+  return '';
+}
+
+// ── Estilo de la web ───────────────────────────────────────────
+function initialTheme() {
+  const fromUrl = new URLSearchParams(location.search).get('tema');
+  if (THEMES[fromUrl]) return fromUrl;
+  try { const saved = localStorage.getItem('caravana-tema'); if (THEMES[saved]) return saved; } catch (e) {}
+  return 'roadtrip';
+}
+function setTheme(theme) {
+  state.theme = theme;
+  document.body.dataset.theme = theme;
+  document.querySelectorAll('[data-action="theme"]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.theme === theme)));
+  document.querySelector('meta[name="theme-color"]').content = THEMES[theme].color;
+  try { localStorage.setItem('caravana-tema', theme); } catch (e) {}
+  if (map) {
+    setTiles(THEMES[theme].tiles);
+    setTimeout(() => map.invalidateSize(), 50);   // el estilo «navegación» cambia el tamaño del mapa
+  }
+}
+function setTiles(key) {
+  if (key === tileKey) return;
+  if (tileLayer) map.removeLayer(tileLayer);
+  const t = TILES[key];
+  tileLayer = L.tileLayer(t.url, { maxZoom: t.maxZoom, subdomains: t.subdomains || 'abc', attribution: t.attribution }).addTo(map);
+  map.setMaxZoom(t.maxZoom);
+  tileKey = key;
+}
 
 // ── Mapa ───────────────────────────────────────────────────────
 function initMap() {
-  map = L.map('map', { zoomControl: true, worldCopyJump: false }).setView(SPAIN.center, SPAIN.zoom);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
+  map = L.map('map', { zoomControl: true }).setView(SPAIN.center, SPAIN.zoom);
+  setTiles(THEMES[state.theme].tiles);
   cluster = L.markerClusterGroup({
     maxClusterRadius: 50,
     showCoverageOnHover: false,
     iconCreateFunction: c => {
       const n = c.getChildCount();
-      const size = n < 10 ? 34 : n < 100 ? 40 : 48;
+      const size = n < 10 ? 36 : n < 100 ? 42 : 50;
       return L.divIcon({ html: `<div class="cluster" style="width:${size}px;height:${size}px">${n}</div>`, className: '', iconSize: [size, size] });
     },
   });
@@ -105,7 +165,7 @@ function initMap() {
 function markerFor(site) {
   if (markers.has(site.id)) return markers.get(site.id);
   const m = L.marker([site.la, site.lo], {
-    icon: L.divIcon({ html: `<div class="pin" style="background:${KINDS[site.k].color}"></div>`, className: '', iconSize: [26, 26], iconAnchor: [13, 26] }),
+    icon: L.divIcon({ html: `<div class="pin" style="--kc:${KINDS[site.k].color}">${ICON[site.k]}</div>`, className: '', iconSize: [34, 41], iconAnchor: [17, 41] }),
     title: siteName(site),
     keyboard: true,
   });
@@ -125,11 +185,11 @@ function renderMarkers() {
 function renderFilters() {
   const counts = state.sites.reduce((acc, s) => ((acc[s.k] = (acc[s.k] || 0) + 1), acc), {});
   $('kindFilters').innerHTML = Object.entries(KINDS).map(([k, v]) => `
-    <button type="button" class="chip" data-action="kind" data-kind="${k}" aria-pressed="${state.kinds.has(k)}">
-      <span class="dot" style="background:${v.color}"></span>${v.short} <span class="n">${(counts[k] || 0).toLocaleString('es-ES')}</span>
+    <button type="button" class="chip chip-kind" data-action="kind" data-kind="${k}" aria-pressed="${state.kinds.has(k)}">
+      ${kindIcon(k)}${v.short} <span class="n">${(counts[k] || 0).toLocaleString('es-ES')}</span>
     </button>`).join('');
-  $('serviceFilters').innerHTML = SERVICES.map(([key, label]) => `
-    <button type="button" class="chip" data-action="service" data-service="${key}" aria-pressed="${state.services.has(key)}">${label}</button>`).join('');
+  $('serviceFilters').innerHTML = SERVICES.map(([key, label, , , icon]) => `
+    <button type="button" class="chip" data-action="service" data-service="${key}" aria-pressed="${state.services.has(key)}">${ICON[icon]}${label}</button>`).join('');
 }
 
 function applyFilters() {
@@ -145,6 +205,11 @@ function referencePoint() {
   return { la: c.lat, lo: c.lng };
 }
 
+function serviceIcons(s) {
+  return AMENITIES.filter(([, , test]) => test(s))
+    .map(([, label, , , icon]) => `<span class="svc on" title="${label}">${ICON[icon]}</span>`).join('');
+}
+
 function renderList() {
   const bounds = map.getBounds();
   const filtered = state.sites.filter(matches);
@@ -153,68 +218,57 @@ function renderList() {
   visible.forEach(s => { s._d = km(ref, s); });
   visible.sort((a, b) => a._d - b._d);
 
-  $('resultsTitle').textContent = state.user ? 'Más cerca de ti' : 'Sitios en el mapa';
+  $('resultsTitle').textContent = state.user ? 'Más cerca de ti' : 'En esta zona del mapa';
   $('resultsCount').textContent = `${visible.length.toLocaleString('es-ES')} de ${filtered.length.toLocaleString('es-ES')}`;
   const list = $('resultsList');
   if (!visible.length) {
     list.innerHTML = `<li class="results-empty">No hay sitios con estos filtros en esta zona. Aleja el mapa o quita algún filtro.</li>`;
     return;
   }
-  const shown = visible.slice(0, LIST_LIMIT);
-  list.innerHTML = shown.map(s => {
-    const tags = [];
-    if (s.fee === false) tags.push('Gratis');
-    if (s.fee === true) tags.push('De pago');
-    if (s.w) tags.push('Agua');
-    if (s.e) tags.push('Luz');
-    if (s.d && s.k !== 'vaciado') tags.push('Vaciado');
-    return `<li class="result${state.selected === s.id ? ' is-active' : ''}" data-action="open" data-id="${s.id}" tabindex="0">
-      <span class="kind-dot" style="background:${KINDS[s.k].color}" aria-hidden="true"></span>
+  list.innerHTML = visible.slice(0, LIST_LIMIT).map(s => `
+    <li class="result${state.selected === s.id ? ' is-active' : ''}" data-action="open" data-id="${s.id}" tabindex="0">
+      ${kindIcon(s.k)}
       <strong>${esc(siteName(s))}</strong>
       <span class="dist">${fmtKm(s._d)}</span>
-      <span class="meta">${esc(KINDS[s.k].label)}${tags.length ? ' · ' + tags.join(' · ') : ''}</span>
-    </li>`;
-  }).join('') + (visible.length > LIST_LIMIT
+      <span class="kind-label">${esc(KINDS[s.k].label)}${s.c && s.n ? ' · ' + esc(s.c) : ''}</span>
+      <span class="svc-row">${serviceIcons(s)}${priceTag(s)}</span>
+    </li>`).join('') + (visible.length > LIST_LIMIT
     ? `<li class="results-empty">Y ${(visible.length - LIST_LIMIT).toLocaleString('es-ES')} más: acerca el mapa para verlos.</li>` : '');
 }
 
 // ── Ficha ──────────────────────────────────────────────────────
-function serviceItem(label, value) {
+function serviceItem(label, value, icon) {
   const cls = value === true ? 'yes' : value === false ? 'no' : 'unknown';
-  const icon = value === true ? ICONS.yes : value === false ? ICONS.no : ICONS.maybe;
-  const note = value == null ? ' <span class="muted">(sin dato)</span>' : '';
-  return `<li class="${cls}">${icon}${label}${note}</li>`;
+  return `<li class="${cls}">${ICON[icon]}${label}${value == null ? '<small>sin dato</small>' : ''}</li>`;
 }
 
 function renderDetail(s) {
   const k = KINDS[s.k];
-  const price = s.fee === false ? '<span class="price free">Gratis</span>'
-    : s.fee === true ? `<span class="price paid">De pago${s.ch ? ' · ' + esc(s.ch) : ''}</span>`
-    : '<span class="price unknown">Precio sin datos</span>';
-  const services = SERVICES.filter(([key]) => key !== 'gratis')
-    .map(([, label, , field]) => serviceItem(label, s[field])).join('');
   const facts = [
     ['Horario', fmtHours(s.oh)], ['Estancia máxima', fmtStay(s.ms)], ['Plazas', s.cap],
-    ['Coordenadas', `${s.la.toFixed(5)}, ${s.lo.toFixed(5)}`],
-  ].filter(([, v]) => v).map(([t, v]) => `<dt>${t}</dt><dd>${esc(v)}</dd>`).join('');
+    ['Coordenadas', `${s.la.toFixed(5)}, ${s.lo.toFixed(5)}`, 'num'],
+  ].filter(([, v]) => v).map(([t, v, cls]) => `<dt>${t}</dt><dd${cls ? ` class="${cls}"` : ''}>${esc(v)}</dd>`).join('');
   const osmType = { n: 'node', w: 'way', r: 'relation' }[s.id[0]];
   const webUrl = s.web && /^https?:\/\//i.test(s.web) ? s.web : s.web ? 'https://' + s.web : null;
+  const where = [s.c && esc(s.c), state.user && `a ${fmtKm(km(state.user, s))} de ti`].filter(Boolean).join(' · ');
 
   $('detail').innerHTML = `
-    <button type="button" class="detail-back" data-action="close">${ICONS.back} Volver a la lista</button>
-    <span class="kind"><span class="kind-dot" style="background:${k.color}"></span>${k.label}</span>
-    <h2>${esc(siteName(s))}</h2>
-    <p class="where">${s.c ? esc(s.c) : ''}${state.user ? `${s.c ? ' · ' : ''}a ${fmtKm(km(state.user, s))} de ti` : ''}</p>
-    ${price}
-    <ul class="services">${services}</ul>
+    <button type="button" class="detail-back" data-action="close">${ICON.back} Volver a la lista</button>
+    <div class="detail-head">
+      ${kindIcon(s.k)}
+      <span class="kind">${k.label}</span>
+      <h2>${esc(siteName(s))}</h2>
+    </div>
+    <p class="where">${where ? `<span>${where}</span>` : ''}${priceTag(s) || '<span class="price unknown">Precio sin datos</span>'}</p>
+    <ul class="services">${AMENITIES.map(([, label, , field, icon]) => serviceItem(label, s[field], icon)).join('')}</ul>
     ${facts ? `<dl class="facts">${facts}</dl>` : ''}
     ${s.ds ? `<p class="desc">${esc(s.ds)}</p>` : ''}
     <div class="actions">
-      <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${s.la},${s.lo}" target="_blank" rel="noopener">${ICONS.route}Cómo llegar</a>
-      ${webUrl ? `<a class="btn btn-line" href="${esc(webUrl)}" target="_blank" rel="noopener">${ICONS.web}Web</a>` : ''}
-      ${s.tel ? `<a class="btn btn-line" href="tel:${esc(s.tel.replace(/\s+/g, ''))}">${ICONS.phone}${esc(s.tel)}</a>` : ''}
+      <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${s.la},${s.lo}" target="_blank" rel="noopener">${ICON.route}Cómo llegar</a>
+      ${webUrl ? `<a class="btn btn-line" href="${esc(webUrl)}" target="_blank" rel="noopener">${ICON.web}Web</a>` : ''}
+      ${s.tel ? `<a class="btn btn-line" href="tel:${esc(s.tel.replace(/\s+/g, ''))}">${ICON.phone}${esc(s.tel)}</a>` : ''}
     </div>
-    <p class="source">¿Falta algo o hay un error? <a href="https://www.openstreetmap.org/${osmType}/${s.id.slice(1)}" target="_blank" rel="noopener">${ICONS.edit} Corrígelo en OpenStreetMap</a> y aparecerá aquí en la siguiente actualización.</p>`;
+    <p class="source">¿Falta algo o hay un error? <a href="https://www.openstreetmap.org/${osmType}/${s.id.slice(1)}" target="_blank" rel="noopener">Corrígelo en OpenStreetMap</a> y aparecerá aquí en la siguiente actualización.</p>`;
 }
 
 function openSite(id, { fly = true } = {}) {
@@ -233,8 +287,9 @@ function openSite(id, { fly = true } = {}) {
     if (cluster.hasLayer(m)) cluster.zoomToShowLayer(m, () => map.panTo([s.la, s.lo]));
     else map.setView([s.la, s.lo], Math.max(map.getZoom(), 14));
   }
-  history.replaceState(null, '', '#s=' + id);
-  $('detail').querySelector('.detail-back').focus({ preventScroll: true });
+  history.replaceState(null, '', location.pathname + location.search + '#s=' + id);
+  // Con teclado, el foco pasa a la ficha; con ratón o dedo no se muestra el recuadro de foco
+  if (lastInputWasKeyboard) $('detail').querySelector('.detail-back').focus({ preventScroll: true });
 }
 
 function closeSite() {
@@ -251,7 +306,7 @@ function closeSite() {
 function saveView() {
   if (state.selected) return;
   const c = map.getCenter();
-  history.replaceState(null, '', `#@${c.lat.toFixed(4)},${c.lng.toFixed(4)},${map.getZoom()}`);
+  history.replaceState(null, '', `${location.pathname}${location.search}#@${c.lat.toFixed(4)},${c.lng.toFixed(4)},${map.getZoom()}`);
 }
 function restoreView() {
   const h = decodeURIComponent(location.hash.slice(1));
@@ -319,13 +374,17 @@ function locate() {
 }
 
 // ── Eventos ────────────────────────────────────────────────────
+let lastInputWasKeyboard = false;
+document.addEventListener('keydown', () => { lastInputWasKeyboard = true; }, true);
+document.addEventListener('pointerdown', () => { lastInputWasKeyboard = false; }, true);
 const ACTIONS = {
-  kind:         d => { state.kinds.has(d.kind) ? state.kinds.delete(d.kind) : state.kinds.add(d.kind); applyFilters(); },
-  service:      d => { state.services.has(d.service) ? state.services.delete(d.service) : state.services.add(d.service); applyFilters(); },
-  open:         d => openSite(d.id),
-  close:        () => closeSite(),
-  locate:       () => locate(),
-  'pick-place': d => pickPlace(+d.i),
+  kind:           d => { state.kinds.has(d.kind) ? state.kinds.delete(d.kind) : state.kinds.add(d.kind); applyFilters(); },
+  service:        d => { state.services.has(d.service) ? state.services.delete(d.service) : state.services.add(d.service); applyFilters(); },
+  open:           d => openSite(d.id),
+  close:          () => closeSite(),
+  locate:         () => locate(),
+  theme:          d => setTheme(d.theme),
+  'pick-place':   d => pickPlace(+d.i),
   'toggle-panel': () => $('panel').classList.toggle('is-expanded'),
 };
 document.addEventListener('click', e => {
@@ -349,11 +408,13 @@ $('searchForm').addEventListener('submit', e => { e.preventDefault(); pickPlace(
 
 // ── Arranque ───────────────────────────────────────────────────
 (async function start() {
+  setTheme(initialTheme());
   initMap();
   try {
     const data = await (await fetch('data/sitios.json')).json();
     state.sites = data.sitios;
     state.sites.forEach(s => state.byId.set(s.id, s));
+    $('statTotal').textContent = state.sites.length.toLocaleString('es-ES');
     $('dataDate').textContent = new Date(data.generado + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   } catch (e) {
     $('resultsList').innerHTML = '<li class="results-empty">No se pudieron cargar los datos. Recarga la página.</li>';

@@ -7,6 +7,10 @@ Mapa de **áreas de autocaravanas, parkings autorizados, campings y puntos de va
 - Filtros por tipo y por servicio: gratis, agua, electricidad, vaciado, aseos, duchas y wifi
 - Ficha de cada sitio con servicios, horario, estancia máxima, plazas, precio, web, teléfono y «Cómo llegar»
 - Enlaces compartibles: la posición del mapa y el sitio abierto quedan en la URL
+- Tres estilos a elegir (se recuerda en el navegador; también `?tema=roadtrip|nav|nature` en la URL):
+  - **Road trip** (por defecto): cielo de atardecer, montañas y tipografía setentera
+  - **Navegación**: oscuro, mapa a pantalla completa y paneles flotantes
+  - **Naturaleza**: limpio, verde bosque y mapa con relieve (OpenTopoMap)
 
 ## Datos
 
@@ -49,7 +53,7 @@ npm run dev        # o cualquier servidor estático
 | `data/sitios.json` | Datos procesados |
 | `scripts/build-data.mjs` | Descarga y procesado de OpenStreetMap |
 
-Servicios externos: teselas de [OpenStreetMap](https://www.openstreetmap.org), búsqueda de localidades con [Photon](https://photon.komoot.io) y [Leaflet](https://leafletjs.com) para el mapa.
+Servicios externos: teselas de [OpenStreetMap](https://www.openstreetmap.org) y [OpenTopoMap](https://opentopomap.org) (CC-BY-SA), búsqueda de localidades con [Photon](https://photon.komoot.io) y [Leaflet](https://leafletjs.com) para el mapa.
 
 ## Publicación
 
