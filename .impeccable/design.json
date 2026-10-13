@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T14:43:42.946Z",
+  "title": "Design System: Caravana",
+  "extensions": {
+    "colorMeta": {
+      "petrol": {
+        "role": "primary",
+        "displayName": "Petróleo ahumado",
+        "canonical": "oklch(29.3% 0.037 225.3)",
+        "tonalRamp": [
+          "oklch(15% 0.018 225.3)",
+          "oklch(25% 0.037 225.3)",
+          "oklch(35% 0.037 225.3)",
+          "oklch(48% 0.037 225.3)",
+          "oklch(60% 0.037 225.3)",
+          "oklch(72% 0.037 225.3)",
+          "oklch(84% 0.037 225.3)",
+          "oklch(95% 0.018 225.3)"
+        ]
+      },
+      "petrol-2": {
+        "role": "primary",
+        "displayName": "Petróleo claro",
+        "canonical": "oklch(38.5% 0.052 229.3)",
+        "tonalRamp": [
+          "oklch(15% 0.026 229.3)",
+          "oklch(25% 0.052 229.3)",
+          "oklch(35% 0.052 229.3)",
+          "oklch(48% 0.052 229.3)",
+          "oklch(60% 0.052 229.3)",
+          "oklch(72% 0.052 229.3)",
+          "oklch(84% 0.052 229.3)",
+          "oklch(95% 0.026 229.3)"
+        ]
+      },
+      "petrol-ink": {
+        "role": "primary",
+        "displayName": "Tinta de cristal",
+        "canonical": "oklch(96.0% 0.006 170.4)",
+        "tonalRamp": [
+          "oklch(15% 0.003 170.4)",
+          "oklch(25% 0.006 170.4)",
+          "oklch(35% 0.006 170.4)",
+          "oklch(48% 0.006 170.4)",
+          "oklch(60% 0.006 170.4)",
+          "oklch(72% 0.006 170.4)",
+          "oklch(84% 0.006 170.4)",
+          "oklch(95% 0.003 170.4)"
+        ]
+      },
+      "petrol-ink-2": {
+        "role": "primary",
+        "displayName": "Tinta de cristal suave",
+        "canonical": "oklch(82.5% 0.018 210.2)",
+        "tonalRamp": [
+          "oklch(15% 0.009 210.2)",
+          "oklch(25% 0.018 210.2)",
+          "oklch(35% 0.018 210.2)",
+          "oklch(48% 0.018 210.2)",
+          "oklch(60% 0.018 210.2)",
+          "oklch(72% 0.018 210.2)",
+          "oklch(84% 0.018 210.2)",
+          "oklch(95% 0.009 210.2)"
+        ]
+      },
+      "k-area": {
+        "role": "secondary",
+        "displayName": "Vinilo bermellón",
+        "canonical": "oklch(61.6% 0.191 32.5)",
+        "tonalRamp": [
+          "oklch(15% 0.080 32.5)",
+          "oklch(25% 0.160 32.5)",
+          "oklch(35% 0.160 32.5)",
+          "oklch(48% 0.160 32.5)",
+          "oklch(60% 0.160 32.5)",
+          "oklch(72% 0.160 32.5)",
+          "oklch(84% 0.160 32.5)",
+          "oklch(95% 0.080 32.5)"
+        ]
+      },
+      "k-camping": {
+        "role": "secondary",
+        "displayName": "Vinilo verde pino",
+        "canonical": "oklch(51.9% 0.097 166.3)",
+        "tonalRamp": [
+          "oklch(15% 0.048 166.3)",
+          "oklch(25% 0.097 166.3)",
+          "oklch(35% 0.097 166.3)",
+          "oklch(48% 0.097 166.3)",
+          "oklch(60% 0.097 166.3)",
+          "oklch(72% 0.097 166.3)",
+          "oklch(84% 0.097 166.3)",
+          "oklch(95% 0.048 166.3)"
+        ]
+      },
+      "k-parking": {
+        "role": "secondary",
+        "displayName": "Vinilo azul parking",
+        "canonical": "oklch(51.0% 0.167 262.6)",
+        "tonalRamp": [
+          "oklch(15% 0.080 262.6)",
+          "oklch(25% 0.160 262.6)",
+          "oklch(35% 0.160 262.6)",
+          "oklch(48% 0.160 262.6)",
+          "oklch(60% 0.160 262.6)",
+          "oklch(72% 0.160 262.6)",
+          "oklch(84% 0.160 262.6)",
+          "oklch(95% 0.080 262.6)"
+        ]
+      },
+      "k-vaciado": {
+        "role": "secondary",
+        "displayName": "Vinilo mostaza",
+        "canonical": "oklch(79.7% 0.160 83.9)",
+        "tonalRamp": [
+          "oklch(15% 0.080 83.9)",
+          "oklch(25% 0.160 83.9)",
+          "oklch(35% 0.160 83.9)",
+          "oklch(48% 0.160 83.9)",
+          "oklch(60% 0.160 83.9)",
+          "oklch(72% 0.160 83.9)",
+          "oklch(84% 0.160 83.9)",
+          "oklch(95% 0.080 83.9)"
+        ]
+      },
+      "stamp": {
+        "role": "tertiary",
+        "displayName": "Tinta de sello",
+        "canonical": "oklch(51.1% 0.162 32.8)",
+        "tonalRamp": [
+          "oklch(15% 0.080 32.8)",
+          "oklch(25% 0.160 32.8)",
+          "oklch(35% 0.160 32.8)",
+          "oklch(48% 0.160 32.8)",
+          "oklch(60% 0.160 32.8)",
+          "oklch(72% 0.160 32.8)",
+          "oklch(84% 0.160 32.8)",
+          "oklch(95% 0.080 32.8)"
+        ]
+      },
+      "ok-bg": {
+        "role": "tertiary",
+        "displayName": "Verde confirmado (fondo)",
+        "canonical": "oklch(93.5% 0.024 163.1)",
+        "tonalRamp": [
+          "oklch(15% 0.012 163.1)",
+          "oklch(25% 0.024 163.1)",
+          "oklch(35% 0.024 163.1)",
+          "oklch(48% 0.024 163.1)",
+          "oklch(60% 0.024 163.1)",
+          "oklch(72% 0.024 163.1)",
+          "oklch(84% 0.024 163.1)",
+          "oklch(95% 0.012 163.1)"
+        ]
+      },
+      "ok-ink": {
+        "role": "tertiary",
+        "displayName": "Verde confirmado (tinta)",
+        "canonical": "oklch(38.7% 0.072 165.8)",
+        "tonalRamp": [
+          "oklch(15% 0.036 165.8)",
+          "oklch(25% 0.072 165.8)",
+          "oklch(35% 0.072 165.8)",
+          "oklch(48% 0.072 165.8)",
+          "oklch(60% 0.072 165.8)",
+          "oklch(72% 0.072 165.8)",
+          "oklch(84% 0.072 165.8)",
+          "oklch(95% 0.036 165.8)"
+        ]
+      },
+      "warn-bg": {
+        "role": "tertiary",
+        "displayName": "Mostaza aviso (fondo)",
+        "canonical": "oklch(95.1% 0.048 90.1)",
+        "tonalRamp": [
+          "oklch(15% 0.024 90.1)",
+          "oklch(25% 0.048 90.1)",
+          "oklch(35% 0.048 90.1)",
+          "oklch(48% 0.048 90.1)",
+          "oklch(60% 0.048 90.1)",
+          "oklch(72% 0.048 90.1)",
+          "oklch(84% 0.048 90.1)",
+          "oklch(95% 0.024 90.1)"
+        ]
+      },
+      "warn-ink": {
+        "role": "tertiary",
+        "displayName": "Mostaza aviso (tinta)",
+        "canonical": "oklch(42.9% 0.088 82.7)",
+        "tonalRamp": [
+          "oklch(15% 0.044 82.7)",
+          "oklch(25% 0.088 82.7)",
+          "oklch(35% 0.088 82.7)",
+          "oklch(48% 0.088 82.7)",
+          "oklch(60% 0.088 82.7)",
+          "oklch(72% 0.088 82.7)",
+          "oklch(84% 0.088 82.7)",
+          "oklch(95% 0.044 82.7)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cristal claro",
+        "canonical": "oklch(95.1% 0.006 170.4)",
+        "tonalRamp": [
+          "oklch(15% 0.003 170.4)",
+          "oklch(25% 0.006 170.4)",
+          "oklch(35% 0.006 170.4)",
+          "oklch(48% 0.006 170.4)",
+          "oklch(60% 0.006 170.4)",
+          "oklch(72% 0.006 170.4)",
+          "oklch(84% 0.006 170.4)",
+          "oklch(95% 0.003 170.4)"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Cristal claro hundido",
+        "canonical": "oklch(91.5% 0.009 171.8)",
+        "tonalRamp": [
+          "oklch(15% 0.005 171.8)",
+          "oklch(25% 0.009 171.8)",
+          "oklch(35% 0.009 171.8)",
+          "oklch(48% 0.009 171.8)",
+          "oklch(60% 0.009 171.8)",
+          "oklch(72% 0.009 171.8)",
+          "oklch(84% 0.009 171.8)",
+          "oklch(95% 0.005 171.8)"
+        ]
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Hoja",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(25% 0.000 89.9)",
+          "oklch(35% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(60% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Reglado",
+        "canonical": "oklch(85.8% 0.013 178.0)",
+        "tonalRamp": [
+          "oklch(15% 0.006 178.0)",
+          "oklch(25% 0.013 178.0)",
+          "oklch(35% 0.013 178.0)",
+          "oklch(48% 0.013 178.0)",
+          "oklch(60% 0.013 178.0)",
+          "oklch(72% 0.013 178.0)",
+          "oklch(84% 0.013 178.0)",
+          "oklch(95% 0.006 178.0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "oklch(24.7% 0.023 230.6)",
+        "tonalRamp": [
+          "oklch(15% 0.012 230.6)",
+          "oklch(25% 0.023 230.6)",
+          "oklch(35% 0.023 230.6)",
+          "oklch(48% 0.023 230.6)",
+          "oklch(60% 0.023 230.6)",
+          "oklch(72% 0.023 230.6)",
+          "oklch(84% 0.023 230.6)",
+          "oklch(95% 0.012 230.6)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Tinta media",
+        "canonical": "oklch(42.8% 0.021 224.0)",
+        "tonalRamp": [
+          "oklch(15% 0.011 224.0)",
+          "oklch(25% 0.021 224.0)",
+          "oklch(35% 0.021 224.0)",
+          "oklch(48% 0.021 224.0)",
+          "oklch(60% 0.021 224.0)",
+          "oklch(72% 0.021 224.0)",
+          "oklch(84% 0.021 224.0)",
+          "oklch(95% 0.011 224.0)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Tinta tenue",
+        "canonical": "oklch(50.5% 0.016 219.8)",
+        "tonalRamp": [
+          "oklch(15% 0.008 219.8)",
+          "oklch(25% 0.016 219.8)",
+          "oklch(35% 0.016 219.8)",
+          "oklch(48% 0.016 219.8)",
+          "oklch(60% 0.016 219.8)",
+          "oklch(72% 0.016 219.8)",
+          "oklch(84% 0.016 219.8)",
+          "oklch(95% 0.008 219.8)"
+        ]
+      },
+      "focus": {
+        "role": "tertiary",
+        "displayName": "Anillo de foco",
+        "canonical": "oklch(51.0% 0.167 262.6)",
+        "tonalRamp": [
+          "oklch(15% 0.080 262.6)",
+          "oklch(25% 0.160 262.6)",
+          "oklch(35% 0.160 262.6)",
+          "oklch(48% 0.160 262.6)",
+          "oklch(60% 0.160 262.6)",
+          "oklch(72% 0.160 262.6)",
+          "oklch(84% 0.160 262.6)",
+          "oklch(95% 0.080 262.6)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "La pregunta del panel en escritorio; oculta en móvil."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Nombre del sitio en la ficha."
+      },
+      "brand": {
+        "displayName": "Marca",
+        "purpose": "Nombre «Caravana» junto a la marca-pegatina (1.25rem en móvil)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Cabecera fija de la lista de resultados."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido; descripción limitada a 65ch; campos a 16px."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botones y chips de tipo."
+      },
+      "numeric": {
+        "displayName": "Cifras",
+        "purpose": "Distancias, recuentos, coordenadas y clústeres, siempre tabulares."
+      },
+      "stamp": {
+        "displayName": "Sello",
+        "purpose": "Solo el texto del sello de registro oficial, en mayúsculas espaciadas."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sticker-shadow",
+        "value": "0 1px 1.5px rgba(21, 35, 42, 0.24), 0 3px 7px rgba(21, 35, 42, 0.14)",
+        "purpose": "Sombra de pegatina en reposo: chip de tipo activo, clúster, controles de zoom."
+      },
+      {
+        "name": "die-drop-shadow",
+        "value": "drop-shadow(0 1px 0.75px rgba(21, 35, 42, 0.3)) drop-shadow(0 3px 3px rgba(21, 35, 42, 0.16))",
+        "purpose": "La misma sombra siguiendo la silueta SVG de cada pegatina y marcador (filter)."
+      },
+      {
+        "name": "lifted-shadow",
+        "value": "0 4px 6px rgba(21, 35, 42, 0.18), 0 12px 22px rgba(21, 35, 42, 0.26)",
+        "purpose": "Lo que flota: desplegable de búsqueda y aviso."
+      },
+      {
+        "name": "peeled-drop-shadow",
+        "value": "drop-shadow(0 6px 4px rgba(21, 35, 42, 0.22)) drop-shadow(0 14px 12px rgba(21, 35, 42, 0.28))",
+        "purpose": "Marcador activo despegado y comienzo de la animación stick."
+      },
+      {
+        "name": "sheet-shadow",
+        "value": "0 -6px 24px rgba(21, 35, 42, 0.22)",
+        "purpose": "Solo la hoja inferior del móvil."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Curva por defecto de todas las transiciones de estado y animaciones."
+      },
+      {
+        "name": "press",
+        "value": "transform scale(0.97) 120ms ease-out",
+        "purpose": "Respuesta al pulsar botones y chips."
+      },
+      {
+        "name": "stick",
+        "value": "560ms ease-out: perspective(240px) translate(8px,-18px) scale(1.24) rotateX(22deg) rotateY(-16deg) rotate(tilt - 16deg) -> rotate(tilt)",
+        "purpose": "Firma: la pegatina del sitio se pega en la cabecera de la ficha."
+      },
+      {
+        "name": "peel",
+        "value": "300ms ease-out: perspective(160px) translateY(-8px) scale(1.32) rotateX(20deg) rotateY(-14deg)",
+        "purpose": "Firma: el marcador activo se despega del mapa."
+      },
+      {
+        "name": "sheet",
+        "value": "height 360ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Hoja inferior móvil entre 46% y 88%."
+      },
+      {
+        "name": "toast-in",
+        "value": "280ms ease-out desde translateY(10px) y opacidad 0",
+        "purpose": "Entrada del aviso flotante."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "prefers-reduced-motion reduce todas las transiciones y animaciones."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "820px"
+      },
+      {
+        "name": "promise-hidden",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción principal de la ficha («Cómo llegar»): petróleo sobre tinta de cristal.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m3 11 19-9-9 19-2-8-8-2z\"/></svg>Cómo llegar</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border:0;border-radius:12px;font:700 0.95rem/1 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:transform 120ms cubic-bezier(0.16,1,0.3,1),background-color 120ms cubic-bezier(0.16,1,0.3,1)} .ds-btn:active{transform:scale(0.97)} .ds-btn:focus-visible{outline:3px solid #2E5FC4;outline-offset:2px;border-radius:8px} .ds-btn-primary{background:#16303A;color:#EEF3F1;text-decoration:none} .ds-btn-primary:hover{background:#23495A}"
+    },
+    {
+      "name": "Botón Cerca de mí",
+      "kind": "button",
+      "refersTo": "button-locate",
+      "description": "Única acción de la barra superior, en vinilo mostaza con tinta oscura.",
+      "html": "<div style=\"background:#16303A;padding:12px\"><button class=\"ds-btn ds-btn-locate\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m3 11 19-9-9 19-2-8-8-2z\"/></svg><span>Cerca de mí</span></button></div>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border:0;border-radius:12px;font:700 0.95rem/1 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:transform 120ms cubic-bezier(0.16,1,0.3,1),background-color 120ms cubic-bezier(0.16,1,0.3,1)} .ds-btn:active{transform:scale(0.97)} .ds-btn:focus-visible{outline:3px solid #2E5FC4;outline-offset:2px;border-radius:8px} .ds-btn-locate{background:#EDB215;color:#15232A} .ds-btn-locate:hover{background:#F4C53A}"
+    },
+    {
+      "name": "Botón de línea",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Acciones secundarias de la ficha (web, teléfono): contorno interior reglado.",
+      "html": "<a class=\"ds-btn ds-btn-line\" href=\"#\">Web</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border:0;border-radius:12px;font:700 0.95rem/1 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:transform 120ms cubic-bezier(0.16,1,0.3,1),background-color 120ms cubic-bezier(0.16,1,0.3,1)} .ds-btn:active{transform:scale(0.97)} .ds-btn:focus-visible{outline:3px solid #2E5FC4;outline-offset:2px;border-radius:8px} .ds-btn-line{background:transparent;color:#15232A;box-shadow:inset 0 0 0 1.5px #C8D3D0;text-decoration:none} .ds-btn-line:hover{background:#DDE5E2}"
+    },
+    {
+      "name": "Buscador",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "Buscador de localidades sobre la barra petróleo.",
+      "html": "<div class=\"ds-bar\"><label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input type=\"search\" placeholder=\"Busca un pueblo o una zona\"></label></div>",
+      "css": ".ds-bar{background:#16303A;padding:10px 20px} .ds-search{position:relative;display:flex;align-items:center} .ds-search svg{position:absolute;left:14px;width:19px;height:19px;color:#5B676B} .ds-search input{width:100%;height:44px;padding:0 16px 0 44px;border:0;border-radius:12px;background:#EBF0EE;color:#15232A;font:16px 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;caret-color:#16303A;outline:none;box-shadow:inset 0 0 0 1.5px transparent;transition:box-shadow 140ms cubic-bezier(0.16,1,0.3,1)} .ds-search input::placeholder{color:#5B676B} .ds-search input:focus{box-shadow:inset 0 0 0 2px #F6D77A}"
+    },
+    {
+      "name": "Chip de tipo",
+      "kind": "chip",
+      "refersTo": "chip-kind",
+      "description": "Filtro por tipo: hueco troquelado vacío (apagado) o pegatina pegada (activo).",
+      "html": "<div class=\"ds-root\" style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;background:#EBF0EE\"><button class=\"ds-chip-kind\" aria-pressed=\"true\"><span class=\"ds-kind\" data-k=\"area\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M2 16V8a2 2 0 0 1 2-2h11l5 4.5V16z\"/><path class=\"mark\" d=\"M15 6.5v4h4.5M5 9.5h6\"/><circle class=\"die ink\" cx=\"7\" cy=\"17\" r=\"2.6\"/><circle class=\"die ink\" cx=\"16\" cy=\"17\" r=\"2.6\"/></svg></span>Áreas <span class=\"n\">1.643</span></button><button class=\"ds-chip-kind\" aria-pressed=\"false\"><span class=\"ds-kind\" data-k=\"vaciado\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M12 1.5s7 7.4 7 12.5a7 7 0 0 1-14 0c0-5.1 7-12.5 7-12.5z\"/><path class=\"mark\" d=\"M12 9.5v6.5M9.3 13.3 12 16l2.7-2.7\"/></svg></span>Vaciado <span class=\"n\">121</span></button></div>",
+      "css": ".ds-root{--petrol:#16303A;--paper:#EBF0EE;--ink:#15232A;--k-area:#E04A2F;--k-camping:#1E7A5C;--k-parking:#2E5FC4;--k-vaciado:#EDB215;--sticker-shadow:0 1px 1.5px rgba(21,35,42,0.24),0 3px 7px rgba(21,35,42,0.14);font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif} [data-k=\"area\"]{--kc:#E04A2F;--kc-ink:#fff;--rot:-4deg} [data-k=\"camping\"]{--kc:#1E7A5C;--kc-ink:#fff;--rot:3deg} [data-k=\"parking\"]{--kc:#2E5FC4;--kc-ink:#fff;--rot:-2deg} [data-k=\"vaciado\"]{--kc:#EDB215;--kc-ink:#15232A;--rot:4deg} .ds-sticker{width:100%;height:100%;overflow:visible} .ds-sticker .die{fill:var(--kc);stroke:#fff;stroke-width:var(--die,6px);stroke-linejoin:round;paint-order:stroke fill;vector-effect:non-scaling-stroke} .ds-sticker .die.ink{fill:#15232A} .ds-sticker .mark{fill:none;stroke:var(--kc-ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round} .ds-sticker .mark-fill{fill:var(--kc-ink);stroke:none} .ds-kind,.ds-pin{display:grid;place-items:center;filter:drop-shadow(0 1px 0.75px rgba(21,35,42,0.3)) drop-shadow(0 3px 3px rgba(21,35,42,0.16))} .ds-kind{width:36px;height:36px;--die:6px;transform:rotate(var(--rot))} .ds-chip-kind{display:inline-flex;align-items:center;gap:7px;height:46px;padding:0 12px 0 8px;border-radius:12px;border:1.5px dashed #C8D3D0;background:transparent;color:#5B676B;font:700 0.92rem 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;cursor:pointer;transition:background-color 140ms,box-shadow 140ms,transform 120ms} .ds-chip-kind:active{transform:scale(0.97)} .ds-chip-kind .ds-kind{width:30px;height:30px;--die:5px;filter:grayscale(1);opacity:0.55} .ds-chip-kind .n{margin-left:auto;font-weight:600;font-size:0.8rem;font-variant-numeric:tabular-nums;color:#5B676B} .ds-chip-kind[aria-pressed=\"true\"]{border-color:transparent;background:#FFFFFF;color:#15232A;box-shadow:var(--sticker-shadow)} .ds-chip-kind[aria-pressed=\"true\"] .ds-kind{filter:drop-shadow(0 1px 0.75px rgba(21,35,42,0.3));opacity:1} .ds-chip-kind[aria-pressed=\"false\"]:hover{color:#435258;border-color:#5B676B} .ds-chip-kind:focus-visible{outline:3px solid #2E5FC4;outline-offset:2px}"
+    },
+    {
+      "name": "Cápsula de servicio",
+      "kind": "chip",
+      "refersTo": "chip-service",
+      "description": "Filtro por servicio: cápsula contorneada, rellena de petróleo al activarse.",
+      "html": "<div style=\"display:flex;gap:6px;padding:12px;background:#EBF0EE\"><button class=\"ds-chip-svc\" aria-pressed=\"true\">Gratis</button><button class=\"ds-chip-svc\" aria-pressed=\"false\">Agua</button></div>",
+      "css": ".ds-chip-svc{height:34px;padding:0 12px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1.5px #C8D3D0;color:#435258;font:600 0.84rem 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;cursor:pointer;transition:background-color 140ms,box-shadow 140ms,transform 120ms} .ds-chip-svc:active{transform:scale(0.97)} .ds-chip-svc[aria-pressed=\"true\"]{background:#16303A;color:#EEF3F1;box-shadow:none} .ds-chip-svc[aria-pressed=\"false\"]:hover{box-shadow:inset 0 0 0 1.5px #5B676B;color:#15232A} .ds-chip-svc:focus-visible{outline:3px solid #2E5FC4;outline-offset:2px}"
+    },
+    {
+      "name": "Fila de resultado",
+      "kind": "card",
+      "refersTo": "result-row",
+      "description": "Fila reglada de la lista: pegatina, nombre, distancia tabular, tipo y servicios.",
+      "html": "<ol class=\"ds-root ds-list\"><li class=\"ds-row\" tabindex=\"0\"><span class=\"ds-kind\" data-k=\"camping\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M2.5 20.5 12 3.5l9.5 17z\"/><path class=\"mark-fill\" d=\"M12 20.5l-3.2-6.3h6.4z\"/></svg></span><strong>Camping Las Dunas</strong><span class=\"dist\">2,4 km</span><span class=\"meta\">Camping</span><span class=\"svc\"><span class=\"ds-price\">Gratis</span></span></li><li class=\"ds-row is-active\" tabindex=\"0\"><span class=\"ds-kind\" data-k=\"parking\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><rect class=\"die\" x=\"2.5\" y=\"2.5\" width=\"19\" height=\"19\" rx=\"5\"/><path class=\"mark\" d=\"M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5\"/></svg></span><strong>Parking del puerto</strong><span class=\"dist\">12 km</span><span class=\"meta\">Parking</span></li></ol>",
+      "css": ".ds-root{--petrol:#16303A;--paper:#EBF0EE;--ink:#15232A;--k-area:#E04A2F;--k-camping:#1E7A5C;--k-parking:#2E5FC4;--k-vaciado:#EDB215;--sticker-shadow:0 1px 1.5px rgba(21,35,42,0.24),0 3px 7px rgba(21,35,42,0.14);font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif} [data-k=\"area\"]{--kc:#E04A2F;--kc-ink:#fff;--rot:-4deg} [data-k=\"camping\"]{--kc:#1E7A5C;--kc-ink:#fff;--rot:3deg} [data-k=\"parking\"]{--kc:#2E5FC4;--kc-ink:#fff;--rot:-2deg} [data-k=\"vaciado\"]{--kc:#EDB215;--kc-ink:#15232A;--rot:4deg} .ds-sticker{width:100%;height:100%;overflow:visible} .ds-sticker .die{fill:var(--kc);stroke:#fff;stroke-width:var(--die,6px);stroke-linejoin:round;paint-order:stroke fill;vector-effect:non-scaling-stroke} .ds-sticker .die.ink{fill:#15232A} .ds-sticker .mark{fill:none;stroke:var(--kc-ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round} .ds-sticker .mark-fill{fill:var(--kc-ink);stroke:none} .ds-kind,.ds-pin{display:grid;place-items:center;filter:drop-shadow(0 1px 0.75px rgba(21,35,42,0.3)) drop-shadow(0 3px 3px rgba(21,35,42,0.16))} .ds-kind{width:36px;height:36px;--die:6px;transform:rotate(var(--rot))} .ds-list{margin:0;padding:0;list-style:none;background:#EBF0EE;color:#15232A;font-size:15px} .ds-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;grid-template-areas:\"icon name dist\" \"icon meta meta\" \"icon svc svc\";column-gap:12px;row-gap:2px;padding:13px 20px;border-bottom:1px solid #C8D3D0;cursor:pointer;transition:background-color 120ms} .ds-row .ds-kind{grid-area:icon;margin-top:2px} .ds-row strong{grid-area:name;font-weight:700;line-height:1.3} .ds-row .dist{grid-area:dist;font-weight:700;font-size:0.95rem;font-variant-numeric:tabular-nums;text-align:right} .ds-row .meta{grid-area:meta;font-size:0.8rem;color:#5B676B} .ds-row .svc{grid-area:svc;display:flex;gap:4px;margin-top:4px} .ds-price{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;font-size:0.76rem;font-weight:700;background:#DCEFE5;color:#12503B} .ds-row:hover{background:#DDE5E2} .ds-row:hover .ds-kind{transform:rotate(0deg) scale(1.06);transition:transform 220ms cubic-bezier(0.16,1,0.3,1)} .ds-row.is-active,.ds-row.is-active:hover{background:#FFFFFF} .ds-row:focus-visible{outline:3px solid #2E5FC4;outline-offset:-3px}"
+    },
+    {
+      "name": "Marcador pegatina",
+      "kind": "custom",
+      "refersTo": "sticker",
+      "description": "Pegatina troquelada por tipo en el mapa; la activa (última) está despegada.",
+      "html": "<div class=\"ds-root ds-map\"><span class=\"ds-pin\" data-k=\"area\" style=\"--tilt:-5deg\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M2 16V8a2 2 0 0 1 2-2h11l5 4.5V16z\"/><path class=\"mark\" d=\"M15 6.5v4h4.5M5 9.5h6\"/><circle class=\"die ink\" cx=\"7\" cy=\"17\" r=\"2.6\"/><circle class=\"die ink\" cx=\"16\" cy=\"17\" r=\"2.6\"/></svg></span><span class=\"ds-pin\" data-k=\"camping\" style=\"--tilt:6deg\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M2.5 20.5 12 3.5l9.5 17z\"/><path class=\"mark-fill\" d=\"M12 20.5l-3.2-6.3h6.4z\"/></svg></span><span class=\"ds-pin\" data-k=\"parking\" style=\"--tilt:2deg\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><rect class=\"die\" x=\"2.5\" y=\"2.5\" width=\"19\" height=\"19\" rx=\"5\"/><path class=\"mark\" d=\"M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5\"/></svg></span><span class=\"ds-pin is-active\" data-k=\"vaciado\" style=\"--tilt:-3deg\"><svg class=\"ds-sticker\" viewBox=\"-3 -3 30 30\" aria-hidden=\"true\"><path class=\"die\" d=\"M12 1.5s7 7.4 7 12.5a7 7 0 0 1-14 0c0-5.1 7-12.5 7-12.5z\"/><path class=\"mark\" d=\"M12 9.5v6.5M9.3 13.3 12 16l2.7-2.7\"/></svg></span></div>",
+      "css": ".ds-root{--petrol:#16303A;--paper:#EBF0EE;--ink:#15232A;--k-area:#E04A2F;--k-camping:#1E7A5C;--k-parking:#2E5FC4;--k-vaciado:#EDB215;--sticker-shadow:0 1px 1.5px rgba(21,35,42,0.24),0 3px 7px rgba(21,35,42,0.14);font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif} [data-k=\"area\"]{--kc:#E04A2F;--kc-ink:#fff;--rot:-4deg} [data-k=\"camping\"]{--kc:#1E7A5C;--kc-ink:#fff;--rot:3deg} [data-k=\"parking\"]{--kc:#2E5FC4;--kc-ink:#fff;--rot:-2deg} [data-k=\"vaciado\"]{--kc:#EDB215;--kc-ink:#15232A;--rot:4deg} .ds-sticker{width:100%;height:100%;overflow:visible} .ds-sticker .die{fill:var(--kc);stroke:#fff;stroke-width:var(--die,6px);stroke-linejoin:round;paint-order:stroke fill;vector-effect:non-scaling-stroke} .ds-sticker .die.ink{fill:#15232A} .ds-sticker .mark{fill:none;stroke:var(--kc-ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round} .ds-sticker .mark-fill{fill:var(--kc-ink);stroke:none} .ds-kind,.ds-pin{display:grid;place-items:center;filter:drop-shadow(0 1px 0.75px rgba(21,35,42,0.3)) drop-shadow(0 3px 3px rgba(21,35,42,0.16))} .ds-kind{width:36px;height:36px;--die:6px;transform:rotate(var(--rot))} .ds-map{display:flex;gap:22px;padding:28px;background:#DFE5E3} .ds-pin{width:38px;height:38px;--die:6px;transform:rotate(var(--tilt));transition:transform 300ms cubic-bezier(0.16,1,0.3,1),filter 300ms cubic-bezier(0.16,1,0.3,1);cursor:pointer} .ds-pin:hover{transform:rotate(0deg) scale(1.15)} .ds-pin.is-active,.ds-pin.is-active:hover{transform:perspective(160px) translateY(-8px) scale(1.32) rotateX(20deg) rotateY(-14deg);filter:drop-shadow(0 6px 4px rgba(21,35,42,0.22)) drop-shadow(0 14px 12px rgba(21,35,42,0.28))}"
+    },
+    {
+      "name": "Clúster de pegatinas",
+      "kind": "custom",
+      "refersTo": "cluster",
+      "description": "Montón de tres pegatinas del tipo más abundante con la cifra tabular.",
+      "html": "<div style=\"display:flex;gap:24px;padding:24px;background:#DFE5E3\"><div class=\"ds-cluster\" data-k=\"camping\" style=\"width:44px;height:44px\"><span>27</span></div><div class=\"ds-cluster\" data-k=\"vaciado\" style=\"width:38px;height:38px\"><span>6</span></div></div>",
+      "css": "[data-k=\"area\"]{--kc:#E04A2F;--kc-ink:#fff;--rot:-4deg} [data-k=\"camping\"]{--kc:#1E7A5C;--kc-ink:#fff;--rot:3deg} [data-k=\"parking\"]{--kc:#2E5FC4;--kc-ink:#fff;--rot:-2deg} [data-k=\"vaciado\"]{--kc:#EDB215;--kc-ink:#15232A;--rot:4deg} .ds-sticker{width:100%;height:100%;overflow:visible} .ds-sticker .die{fill:var(--kc);stroke:#fff;stroke-width:var(--die,6px);stroke-linejoin:round;paint-order:stroke fill;vector-effect:non-scaling-stroke} .ds-sticker .die.ink{fill:#15232A} .ds-sticker .mark{fill:none;stroke:var(--kc-ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round} .ds-sticker .mark-fill{fill:var(--kc-ink);stroke:none} .ds-kind,.ds-pin{display:grid;place-items:center;filter:drop-shadow(0 1px 0.75px rgba(21,35,42,0.3)) drop-shadow(0 3px 3px rgba(21,35,42,0.16))} .ds-kind{width:36px;height:36px;--die:6px;transform:rotate(var(--rot))} .ds-cluster{position:relative;display:grid} .ds-cluster::before,.ds-cluster::after,.ds-cluster span{grid-area:1/1;border-radius:30%;background:var(--kc);border:3px solid #fff;box-shadow:0 1px 1.5px rgba(21,35,42,0.24),0 3px 7px rgba(21,35,42,0.14)} .ds-cluster::before{content:'';transform:translate(-5px,3px) rotate(-12deg)} .ds-cluster::after{content:'';transform:translate(4px,-3px) rotate(9deg)} .ds-cluster span{position:relative;z-index:1;display:grid;place-items:center;color:var(--kc-ink);font:800 0.9rem 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;font-variant-numeric:tabular-nums;transform:rotate(var(--rot))}"
+    },
+    {
+      "name": "Sello de registro oficial",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "Sello estampado de procedencia oficial; solo para campings inscritos.",
+      "html": "<span class=\"ds-stamp\"><svg viewBox=\"0 0 24 24\" width=\"15\" height=\"15\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 2l2.4 2.2 3.2-.4.8 3.1 2.8 1.6-1.2 3 1.2 3-2.8 1.6-.8 3.1-3.2-.4L12 22l-2.4-2.2-3.2.4-.8-3.1-2.8-1.6 1.2-3-1.2-3 2.8-1.6.8-3.1 3.2.4z\"/><path d=\"M8.5 12l2.5 2.5 4.5-5\"/></svg>Registro oficial</span>",
+      "css": ".ds-stamp{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;margin:3px 0 2px 3px;border:2px solid #B0361F;border-radius:6px;outline:1px solid #B0361F;outline-offset:2px;color:#B0361F;font:800 0.74rem 'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;letter-spacing:0.09em;text-transform:uppercase;transform:rotate(-2deg)}"
+    },
+    {
+      "name": "Servicios de la ficha",
+      "kind": "custom",
+      "refersTo": "service-yes",
+      "description": "Tres glifos para tres estados: presente, ausente y sin dato.",
+      "html": "<ul class=\"ds-services\"><li class=\"yes\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z\"/></svg>Agua</li><li class=\"no\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0\"/></svg>Wifi</li><li class=\"unknown\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 21V7a4 4 0 0 1 8 0\"/><path d=\"M8 7h8\"/></svg>Duchas<small>sin dato</small></li></ul>",
+      "css": ".ds-services{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:12px;list-style:none;background:#EBF0EE;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif} .ds-services li{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px 9px;border-radius:12px;font-size:0.8rem;font-weight:700;text-align:center;line-height:1.2} .ds-services svg{width:22px;height:22px} .ds-services small{font-size:0.7rem;font-weight:600} .ds-services .yes{background:#16303A;color:#EEF3F1} .ds-services .no{box-shadow:inset 0 0 0 1.5px #C8D3D0;color:#5B676B;text-decoration:line-through;text-decoration-thickness:1.5px} .ds-services .no svg{opacity:0.55} .ds-services .unknown{border:1.5px dashed #C8D3D0;color:#5B676B}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Pegatinas de la luna trasera",
+    "overview": "Cada sitio es una pegatina troquelada de las que se coleccionan en la luna trasera de una autocaravana. La herramienta que las rodea es limpia, estándar y silenciosa: barra de cristal ahumado verde petróleo, hoja de trabajo en cristal claro verdoso, filas regladas y cifras tabulares. La pegatina es la única voz del sistema, y por eso aparece igual en todas partes: en el mapa, en los filtros, en la lista, en la ficha y en la marca.\n\nLa superficie está pensada para operar, no para explorar: densidad de herramienta en el panel, mapa a pantalla completa en el móvil con una hoja inferior y una sola familia tipográfica. Todo el color es plano (vinilo), sin degradados; la profundidad es la de un adhesivo sobre el cristal: un filo blanco de troquel y una sombra corta, desplazada y poco difuminada. Se rechazan de forma expresa el panel blanco con botón azul genérico y el «road trip» de atardecer que sustituye este mundo.",
+    "keyCharacteristics": [
+      "Cuatro tintas de vinilo, una por tipo de sitio, cada una con su propio troquel (silueta).",
+      "Filo blanco de troquel y sombra corta de pegatina como única profundidad en reposo.",
+      "Inclinación de «pegada a mano» fija por sitio (entre −7° y 7°), derivada del identificador.",
+      "Una sola familia (Bricolage Grotesque) en pesos altos para titulares y cifras tabulares.",
+      "Filas regladas con columnas fijas, como un tablero de salidas.",
+      "Movimiento con firma: la pegatina se pega en la ficha y el marcador activo se despega del mapa."
+    ],
+    "rules": [
+      {
+        "name": "The Vinilo por tipo Rule",
+        "body": "Cada tipo de sitio tiene un color y un troquel propios, y esa pareja es inseparable: el mismo par aparece en marcador, clúster, chip, fila y ficha. Ningún otro elemento usa las tintas de vinilo salvo el botón «Cerca de mí» (mostaza) y el punto de ubicación (azul).",
+        "section": "colors"
+      },
+      {
+        "name": "The Color plano Rule",
+        "body": "Todo el color es plano. Sin degradados, sin transparencias decorativas; las teselas del mapa se desaturan (saturate 0.55) para que los vinilos sean lo único saturado de la pantalla.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hoja blanca Rule",
+        "body": "El blanco (sheet) significa «pegado» o «encima»: solo lo llevan el estado activo y lo que flota. El reposo es cristal claro.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cifras tabulares Rule",
+        "body": "Toda cifra que se compara (distancia, recuento, coordenadas, número del clúster) usa cifras tabulares y se alinea en su columna.",
+        "section": "typography"
+      },
+      {
+        "name": "The Una familia Rule",
+        "body": "Una sola familia tipográfica; la jerarquía se hace con peso (400 a 800) y tamaño, nunca con una segunda fuente.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sombra corta Rule",
+        "body": "En reposo, la única sombra es la de pegatina: corta, desplazada hacia abajo y suave, teñida con la tinta (21, 35, 42), nunca negra pura ni de bloque duro.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do dar a cada tipo de sitio su pareja fija de vinilo y troquel, y repetirla en marcador, clúster, chip, fila y ficha.",
+      "Do rodear toda pegatina con su filo blanco de troquel (--die de 5 a 10px según tamaño) y la sombra corta de pegatina.",
+      "Do derivar la inclinación de cada sitio de su identificador (−7° a 7°) para que sea estable entre visitas.",
+      "Do usar cifras tabulares en distancias, recuentos, coordenadas y clústeres.",
+      "Do distinguir presente, ausente y sin dato con tres glifos distintos; «sin dato» siempre en borde discontinuo.",
+      "Do mantener objetivos táctiles de 44px (42px en chips de tipo en móvil) y limitar los hovers a dispositivos con ratón.",
+      "Do respetar prefers-reduced-motion: todas las transiciones y animaciones se reducen a 0.01ms."
+    ],
+    "donts": [
+      "Don't usar degradados ni color no plano; el vinilo es plano.",
+      "Don't usar las tintas de vinilo para decorar elementos que no sean un tipo de sitio (salvo «Cerca de mí» y el punto de ubicación).",
+      "Don't usar fondos crema o cálidos para la hoja de trabajo; el cristal claro es verdoso (paper).",
+      "Don't usar sombras negras puras ni de bloque duro; la sombra de pegatina es corta, suave y teñida con la tinta.",
+      "Don't añadir una segunda familia tipográfica.",
+      "Don't volver al panel blanco con botón azul genérico ni a la estética de atardecer de «road trip».",
+      "Don't usar el sello para nada que no sea la procedencia de un registro oficial."
+    ]
+  }
+}

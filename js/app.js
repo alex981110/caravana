@@ -28,6 +28,15 @@ const ICON = {
   badge:   svg('<path d="M12 2l2.4 2.2 3.2-.4.8 3.1 2.8 1.6-1.2 3 1.2 3-2.8 1.6-.8 3.1-3.2-.4L12 22l-2.4-2.2-3.2.4-.8-3.1-2.8-1.6 1.2-3-1.2-3 2.8-1.6.8-3.1 3.2.4z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
 };
 
+// Pegatinas troqueladas: la silueta de cada pictograma con su propio filo blanco
+const STICKER = {
+  area:    '<path class="die" d="M2 16V8a2 2 0 0 1 2-2h11l5 4.5V16z"/><path class="mark" d="M15 6.5v4h4.5M5 9.5h6"/><circle class="die ink" cx="7" cy="17" r="2.6"/><circle class="die ink" cx="16" cy="17" r="2.6"/>',
+  camping: '<path class="die" d="M2.5 20.5 12 3.5l9.5 17z"/><path class="mark-fill" d="M12 20.5l-3.2-6.3h6.4z"/>',
+  parking: '<rect class="die" x="2.5" y="2.5" width="19" height="19" rx="5"/><path class="mark" d="M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5"/>',
+  vaciado: '<path class="die" d="M12 1.5s7 7.4 7 12.5a7 7 0 0 1-14 0c0-5.1 7-12.5 7-12.5z"/><path class="mark" d="M12 9.5v6.5M9.3 13.3 12 16l2.7-2.7"/>',
+};
+const sticker = k => `<svg class="sticker" viewBox="-3 -3 30 30" aria-hidden="true">${STICKER[k]}</svg>`;
+
 // ── Configuración ──────────────────────────────────────────────
 const KINDS = {
   area:    { label: 'Área de autocaravanas', short: 'Áreas',    color: 'var(--k-area)' },
@@ -48,18 +57,8 @@ const SERVICES = [
 ];
 const AMENITIES = SERVICES.filter(([key]) => key !== 'gratis' && key !== 'conf');
 
-// Estilos de la web: cada uno con sus teselas de mapa y color de la barra del navegador
-const THEMES = {
-  roadtrip: { color: '#E2603A', tiles: 'osm' },
-  nav:      { color: '#0E1116', tiles: 'osm' },
-  nature:   { color: '#2F7D5B', tiles: 'topo' },
-};
-const TILES = {
-  osm:  { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' },
-  topo: { url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 17, subdomains: 'abc',
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM · estilo &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)' },
-};
+const TILES = { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' };
 
 const SPAIN = { center: [40.2, -3.6], zoom: 6 };
 const LIST_LIMIT = 60;
@@ -74,10 +73,9 @@ const state = {
   services: new Set(),
   selected: null,
   user: null,          // { la, lo } si el usuario ha compartido su ubicación
-  theme: 'roadtrip',
   registros: {},       // fuente → organismo, para citar el registro oficial
 };
-let map, cluster, userMarker, tileLayer, tileKey;
+let map, cluster, userMarker;
 const markers = new Map();
 
 // ── Utilidades ─────────────────────────────────────────────────
@@ -88,7 +86,7 @@ function km(a, b) {
   const h = Math.sin(r(b.la - a.la) / 2) ** 2 + Math.cos(r(a.la)) * Math.cos(r(b.la)) * Math.sin(r(b.lo - a.lo) / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
-const fmtKm = d => d < 1 ? `${Math.round(d * 1000)} m` : d < 10 ? `${d.toFixed(1).replace('.', ',')} km` : `${Math.round(d)} km`;
+const fmtKm = d => d < 1 ? `${Math.round(d * 1000)} m` : d < 100 ? `${d.toFixed(1).replace('.', ',')} km` : `${Math.round(d)} km`;
 
 // Horario y estancia de OpenStreetMap en español
 const MONTHS = { Jan: 'ene', Feb: 'feb', Mar: 'mar', Apr: 'abr', May: 'may', Jun: 'jun', Jul: 'jul', Aug: 'ago', Sep: 'sep', Oct: 'oct', Nov: 'nov', Dec: 'dic' };
@@ -123,51 +121,34 @@ function toast(msg) {
 }
 const matches = s => state.kinds.has(s.k) && SERVICES.every(([key, , test]) => !state.services.has(key) || test(s));
 const isMobile = () => window.matchMedia('(max-width: 820px)').matches;
-const kindIcon = k => `<span class="kind-icon" style="--kc:${KINDS[k].color}">${ICON[k]}</span>`;
+// Cada tipo es una pegatina con su color y su troquel (forma) propios
+const kindIcon = k => `<span class="kind-icon" data-k="${k}">${sticker(k)}</span>`;
+// Inclinación fija por sitio, como una pegatina pegada a mano (−7° a 7°)
+function tilt(id) {
+  let h = 0;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return (Math.abs(h) % 15) - 7;
+}
 function priceTag(s) {
   if (s.fee === false) return '<span class="price free">Gratis</span>';
   if (s.fee === true) return `<span class="price paid">De pago${s.ch ? ' · ' + esc(s.ch) : ''}</span>`;
   return '';
 }
 
-// ── Estilo de la web ───────────────────────────────────────────
-function initialTheme() {
-  const fromUrl = new URLSearchParams(location.search).get('tema');
-  if (THEMES[fromUrl]) return fromUrl;
-  try { const saved = localStorage.getItem('caravana-tema'); if (THEMES[saved]) return saved; } catch (e) {}
-  return 'roadtrip';
-}
-function setTheme(theme) {
-  state.theme = theme;
-  document.body.dataset.theme = theme;
-  document.querySelectorAll('[data-action="theme"]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.theme === theme)));
-  document.querySelector('meta[name="theme-color"]').content = THEMES[theme].color;
-  try { localStorage.setItem('caravana-tema', theme); } catch (e) {}
-  if (map) {
-    setTiles(THEMES[theme].tiles);
-    setTimeout(() => map.invalidateSize(), 50);   // el estilo «navegación» cambia el tamaño del mapa
-  }
-}
-function setTiles(key) {
-  if (key === tileKey) return;
-  if (tileLayer) map.removeLayer(tileLayer);
-  const t = TILES[key];
-  tileLayer = L.tileLayer(t.url, { maxZoom: t.maxZoom, subdomains: t.subdomains || 'abc', attribution: t.attribution }).addTo(map);
-  map.setMaxZoom(t.maxZoom);
-  tileKey = key;
-}
-
 // ── Mapa ───────────────────────────────────────────────────────
 function initMap() {
-  map = L.map('map', { zoomControl: true }).setView(SPAIN.center, SPAIN.zoom);
-  setTiles(THEMES[state.theme].tiles);
+  map = L.map('map', { zoomControl: true, maxZoom: TILES.maxZoom }).setView(SPAIN.center, SPAIN.zoom);
+  L.tileLayer(TILES.url, { maxZoom: TILES.maxZoom, attribution: TILES.attribution }).addTo(map);
   cluster = L.markerClusterGroup({
     maxClusterRadius: 50,
     showCoverageOnHover: false,
     iconCreateFunction: c => {
       const n = c.getChildCount();
-      const size = n < 10 ? 36 : n < 100 ? 42 : 50;
-      return L.divIcon({ html: `<div class="cluster" style="width:${size}px;height:${size}px">${n}</div>`, className: '', iconSize: [size, size] });
+      const size = n < 10 ? 38 : n < 100 ? 44 : 52;
+      const tally = {};
+      c.getAllChildMarkers().forEach(m => { tally[m.options.kind] = (tally[m.options.kind] || 0) + 1; });
+      const top = Object.keys(tally).sort((a, b) => tally[b] - tally[a])[0];
+      return L.divIcon({ html: `<div class="cluster" data-k="${top}" style="width:${size}px;height:${size}px"><span class="kind-icon" data-k="${top}">${sticker(top)}</span><b>${n}</b></div>`, className: '', iconSize: [size, size] });
     },
   });
   map.addLayer(cluster);
@@ -177,7 +158,8 @@ function initMap() {
 function markerFor(site) {
   if (markers.has(site.id)) return markers.get(site.id);
   const m = L.marker([site.la, site.lo], {
-    icon: L.divIcon({ html: `<div class="pin" style="--kc:${KINDS[site.k].color}">${ICON[site.k]}</div>`, className: '', iconSize: [34, 41], iconAnchor: [17, 41] }),
+    icon: L.divIcon({ html: `<div class="pin" data-k="${site.k}" style="--tilt:${tilt(site.id)}deg">${sticker(site.k)}</div>`, className: '', iconSize: [38, 38], iconAnchor: [19, 19] }),
+    kind: site.k,
     title: siteName(site),
     keyboard: true,
   });
@@ -254,6 +236,8 @@ function serviceItem(label, value, icon) {
   return `<li class="${cls}">${ICON[icon]}${label}${value == null ? '<small>sin dato</small>' : ''}</li>`;
 }
 
+const listEs = a => a.length > 1 ? `${a.slice(0, -1).join(', ')} y ${a[a.length - 1]}` : a[0];
+
 function renderDetail(s) {
   const k = KINDS[s.k];
   const facts = [
@@ -262,28 +246,31 @@ function renderDetail(s) {
   ].filter(([, v]) => v).map(([t, v, cls]) => `<dt>${t}</dt><dd${cls ? ` class="${cls}"` : ''}>${esc(v)}</dd>`).join('');
   const osmType = { n: 'node', w: 'way', r: 'relation' }[s.id[0]];   // undefined en sitios que solo están en un registro
   const fit = campingFit(s);
-  const official = s.rg ? `<p class="official">${ICON.badge}<span>Inscrito en el registro oficial de campings${state.registros[s.rg] ? ' · ' + esc(state.registros[s.rg]) : ''}${s.cat ? ` · <strong>${esc(s.cat)}</strong>` : ''}</span></p>` : '';
+  const official = s.rg ? `<p class="official"><span class="stamp">${ICON.badge}Registro oficial</span><span>Inscrito en el registro oficial de campings${state.registros[s.rg] ? ' · ' + esc(state.registros[s.rg]) : ''}${s.cat ? ` · <strong>${esc(s.cat)}</strong>` : ''}</span></p>` : '';
   const webUrl = s.web && /^https?:\/\//i.test(s.web) ? s.web : s.web ? 'https://' + s.web : null;
+  const known = AMENITIES.filter(([, , , field]) => s[field] != null);
+  const unknown = AMENITIES.filter(([, , , field]) => s[field] == null);
   const where = [s.c && esc(s.c), state.user && `a ${fmtKm(km(state.user, s))} de ti`].filter(Boolean).join(' · ');
 
   $('detail').innerHTML = `
     <button type="button" class="detail-back" data-action="close">${ICON.back} Volver a la lista</button>
-    <div class="detail-head">
+    <div class="detail-head" style="--tilt:${tilt(s.id)}deg">
       ${kindIcon(s.k)}
       <span class="kind">${k.label}</span>
       <h2>${esc(siteName(s))}</h2>
     </div>
     <p class="where">${where ? `<span>${where}</span>` : ''}${priceTag(s) || '<span class="price unknown">Precio sin datos</span>'}</p>
-    ${fit ? `<p class="fit fit-${fit.cls}">${fit.cls === 'yes' ? ICON.check : ICON.info}<span>${fit.long}</span></p>` : ''}
-    ${official}
-    <ul class="services">${AMENITIES.map(([, label, , field, icon]) => serviceItem(label, s[field], icon)).join('')}</ul>
-    ${facts ? `<dl class="facts">${facts}</dl>` : ''}
-    ${s.ds ? `<p class="desc">${esc(s.ds)}</p>` : ''}
     <div class="actions">
       <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${s.la},${s.lo}" target="_blank" rel="noopener">${ICON.route}Cómo llegar</a>
       ${webUrl ? `<a class="btn btn-line" href="${esc(webUrl)}" target="_blank" rel="noopener">${ICON.web}Web</a>` : ''}
       ${s.tel ? `<a class="btn btn-line" href="tel:${esc(s.tel.replace(/\s+/g, ''))}">${ICON.phone}${esc(s.tel)}</a>` : ''}
     </div>
+    ${fit ? `<p class="fit fit-${fit.cls}">${fit.cls === 'yes' ? ICON.check : ICON.info}<span>${fit.long}</span></p>` : ''}
+    ${official}
+    ${known.length ? `<ul class="services">${known.map(([, label, , field, icon]) => serviceItem(label, s[field], icon)).join('')}</ul>` : ''}
+    ${unknown.length ? `<p class="unknown-line">${ICON.info}<span>Sin datos de ${listEs(unknown.map(([, label]) => label.toLowerCase()))}.</span></p>` : ''}
+    ${facts ? `<dl class="facts">${facts}</dl>` : ''}
+    ${s.ds ? `<p class="desc">${esc(s.ds)}</p>` : ''}
     <p class="source">${osmType
       ? `¿Falta algo o hay un error? <a href="https://www.openstreetmap.org/${osmType}/${s.id.slice(1)}" target="_blank" rel="noopener">Corrígelo en OpenStreetMap</a> y aparecerá aquí en la siguiente actualización.`
       : `Este sitio aún no está en OpenStreetMap: sale del registro oficial. Si lo conoces, <a href="https://www.openstreetmap.org/edit#map=17/${s.la}/${s.lo}" target="_blank" rel="noopener">añádelo a OpenStreetMap</a>.`}</p>`;
@@ -295,6 +282,7 @@ function openSite(id, { fly = true } = {}) {
   state.selected = id;
   renderDetail(s);
   $('detail').hidden = false;
+  document.querySelector('.panel-intro').hidden = true;
   document.querySelector('.filters').hidden = true;
   document.querySelector('.results').hidden = true;
   $('panel').scrollTop = 0;
@@ -313,8 +301,10 @@ function openSite(id, { fly = true } = {}) {
 function closeSite() {
   state.selected = null;
   $('detail').hidden = true;
+  document.querySelector('.panel-intro').hidden = false;
   document.querySelector('.filters').hidden = false;
   document.querySelector('.results').hidden = false;
+  $('panel').scrollTop = 0;
   markers.forEach(m => m.getElement()?.firstElementChild?.classList.remove('is-active'));
   saveView();
   renderList();
@@ -401,7 +391,6 @@ const ACTIONS = {
   open:           d => openSite(d.id),
   close:          () => closeSite(),
   locate:         () => locate(),
-  theme:          d => setTheme(d.theme),
   'pick-place':   d => pickPlace(+d.i),
   'toggle-panel': () => $('panel').classList.toggle('is-expanded'),
 };
@@ -428,14 +417,13 @@ $('searchForm').addEventListener('submit', e => { e.preventDefault(); pickPlace(
 
 // ── Arranque ───────────────────────────────────────────────────
 (async function start() {
-  setTheme(initialTheme());
   initMap();
   try {
     const data = await (await fetch('data/sitios.json')).json();
     state.sites = data.sitios;
     state.sites.forEach(s => state.byId.set(s.id, s));
     state.registros = data.registros || {};
-    $('statTotal').textContent = state.sites.length.toLocaleString('es-ES');
+    document.querySelectorAll('.stat-total').forEach(el => { el.textContent = state.sites.length.toLocaleString('es-ES'); });
     $('dataDate').textContent = new Date(data.generado + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   } catch (e) {
     $('resultsList').innerHTML = '<li class="results-empty">No se pudieron cargar los datos. Recarga la página.</li>';
